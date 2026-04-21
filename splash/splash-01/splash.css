@@ -1,6 +1,6 @@
-/* splash/splash-01/splash.css */
+/* splash/splash-01/splash.css - 简化版 */
 /**
- * 开屏动画 - 文件夹展开效果
+ * 开屏动画 - Apple 风格
  * 作者：@玉元一shadow
  */
 
@@ -16,7 +16,7 @@
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: linear-gradient(135deg, #E3F2FD 0%, #FFFFFF 50%, #F0F8FF 100%);
+  background: #FFFFFF;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -24,109 +24,22 @@
   overflow: hidden;
 }
 
-/* ===== 背景装饰 ===== */
-.splash-bg {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: 
-    radial-gradient(circle at 20% 30%, rgba(176, 224, 230, 0.2) 0%, transparent 50%),
-    radial-gradient(circle at 80% 70%, rgba(135, 206, 235, 0.15) 0%, transparent 50%);
-  animation: bgPulse 4s ease-in-out infinite;
-}
-
-@keyframes bgPulse {
-  0%, 100% { opacity: 0.5; }
-  50% { opacity: 1; }
-}
-
-/* ===== 文件夹容器 ===== */
-.folders-container {
-  position: relative;
-  width: 600px;
-  height: 400px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 40px;
-}
-
-/* ===== 单个文件夹 ===== */
-.folder {
-  position: absolute;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
-  opacity: 0;
-  transform: translateX(-100px);
-  animation: folderSlideIn 0.6s ease-out forwards;
-}
-
-.folder-1 {
-  left: 50px;
-  top: 50px;
-  animation-delay: 0.2s;
-}
-
-.folder-2 {
-  left: 150px;
-  top: 150px;
-  animation-delay: 0.4s;
-}
-
-.folder-3 {
-  left: 250px;
-  top: 100px;
-  animation-delay: 0.6s;
-}
-
-.folder-4 {
-  left: 350px;
-  top: 200px;
-  animation-delay: 0.8s;
-}
-
-@keyframes folderSlideIn {
-  0% {
-    opacity: 0;
-    transform: translateX(-100px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
+/* ===== 文件夹图标 ===== */
 .folder-icon {
-  font-size: 64px;
-  filter: drop-shadow(0 4px 12px rgba(91, 155, 213, 0.3));
-  transition: all 0.3s ease;
+  opacity: 0;
+  transform: scale(0.8);
+  animation: folderAppear 0.6s ease-out forwards;
 }
 
-.folder-label {
-  font-size: 14px;
-  color: #5A6C7D;
-  font-weight: 500;
-  letter-spacing: 0.05em;
-}
-
-/* 主文件夹特殊效果 */
-.folder-main {
-  animation: folderSlideIn 0.6s ease-out forwards, 
-             folderGlow 1s ease-in-out 1.2s forwards;
-  z-index: 10;
-}
-
-@keyframes folderGlow {
-  0%, 100% {
-    filter: drop-shadow(0 0 0 transparent);
+@keyframes folderAppear {
+  to {
+    opacity: 1;
+    transform: scale(1);
   }
-  50% {
-    filter: drop-shadow(0 0 30px rgba(91, 155, 213, 0.6));
-  }
+}
+
+.folder-icon svg {
+  filter: drop-shadow(0 10px 30px rgba(0, 113, 227, 0.2));
 }
 
 /* ===== 鼠标指针 ===== */
@@ -134,157 +47,65 @@
   position: absolute;
   width: 24px;
   height: 24px;
-  color: #5B9BD5;
   opacity: 0;
-  transform: translate(-200px, -200px);
-  animation: cursorMove 2s ease-in-out 1.4s forwards;
-  z-index: 20;
-  filter: drop-shadow(0 2px 8px rgba(91, 155, 213, 0.4));
+  transform: translate(-150px, -150px);
+  animation: cursorMove 1.5s ease-in-out 0.8s forwards;
+  filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.15));
 }
 
 @keyframes cursorMove {
   0% {
     opacity: 0;
-    transform: translate(-200px, -200px);
+    transform: translate(-150px, -150px);
   }
-  30% {
+  20% {
     opacity: 1;
+  }
+  60% {
+    opacity: 1;
+    transform: translate(0, 0);
   }
   70% {
-    opacity: 1;
-    transform: translate(250px, 100px);
+    transform: translate(0, 0) scale(0.9);
   }
-  85% {
-    transform: translate(250px, 100px) scale(0.9);
+  80% {
+    transform: translate(0, 0) scale(1);
   }
   100% {
     opacity: 0;
-    transform: translate(250px, 100px) scale(1);
+    transform: translate(0, 0);
   }
 }
 
-/* ===== 文件夹展开效果 ===== */
-.folder-expand {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  opacity: 0;
-  transform: scale(0.5);
-  animation: folderExpand 0.8s ease-out 2.2s forwards;
+/* ===== 文件夹展开和淡出 ===== */
+.splash-wrapper.expand .folder-icon {
+  animation: folderExpand 0.8s ease-out 2.3s forwards;
 }
 
 @keyframes folderExpand {
   0% {
-    opacity: 0;
-    transform: scale(0.5);
+    transform: scale(1);
+    opacity: 1;
   }
   50% {
-    opacity: 1;
-    transform: scale(1.1);
+    transform: scale(1.5);
+    opacity: 0.8;
   }
   100% {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
-.expand-content {
-  text-align: center;
-  animation: contentFadeIn 0.6s ease-out 2.5s forwards;
-  opacity: 0;
-}
-
-@keyframes contentFadeIn {
-  from {
+    transform: scale(2);
     opacity: 0;
-    transform: translateY(20px);
   }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.expand-title {
-  font-size: 72px;
-  font-weight: 600;
-  color: #5B9BD5;
-  font-family: "Playfair Display", serif;
-  letter-spacing: 0.1em;
-  margin-bottom: 16px;
-  background: linear-gradient(135deg, #5B9BD5, #87CEEB);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.expand-subtitle {
-  font-size: 18px;
-  color: #5A6C7D;
-  letter-spacing: 0.15em;
-}
-
-/* ===== 加载进度条 ===== */
-.loading-bar {
-  position: absolute;
-  bottom: 60px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 300px;
-  height: 3px;
-  background: rgba(91, 155, 213, 0.2);
-  border-radius: 10px;
-  overflow: hidden;
-}
-
-.loading-progress {
-  height: 100%;
-  background: linear-gradient(90deg, #5B9BD5, #87CEEB);
-  border-radius: 10px;
-  animation: loadingProgress 3s ease-out forwards;
-  box-shadow: 0 0 10px rgba(91, 155, 213, 0.5);
-}
-
-@keyframes loadingProgress {
-  from { width: 0%; }
-  to { width: 100%; }
 }
 
 /* ===== 整体淡出 ===== */
 .splash-wrapper.fade-out {
-  animation: splashFadeOut 0.5s ease-out forwards;
+  animation: splashFadeOut 0.6s ease-out forwards;
 }
 
 @keyframes splashFadeOut {
   to {
     opacity: 0;
-    visibility: hidden;
   }
 }
 
-/* ===== 响应式 ===== */
-@media (max-width: 768px) {
-  .folders-container {
-    width: 90vw;
-    height: 300px;
-  }
-  
-  .folder {
-    transform: scale(0.7);
-  }
-  
-  .expand-title {
-    font-size: 48px;
-  }
-  
-  .expand-subtitle {
-    font-size: 14px;
-  }
-  
-  .loading-bar {
-    width: 80%;
-  }
-}
+
