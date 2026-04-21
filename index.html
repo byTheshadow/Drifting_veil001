@@ -1,4 +1,4 @@
-<!-- index.html -->
+<!-- index.html - 完整重构版 -->
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -10,8 +10,6 @@
   <link rel="stylesheet" href="styles/base.css">
   <link rel="stylesheet" href="styles/theme-blue-dream.css">
   <link rel="stylesheet" href="styles/components.css">
-  <link rel="stylesheet" href="styles/animations.css">
-
   
   <!-- 配置文件 -->
   <script src="config.js"></script>
@@ -19,13 +17,15 @@
 </head>
 <body>
   
-  <!-- splash-screen -->
-<div id="splash-screen" class="splash-container">
-  <iframe src="splash/splash-01/splash.html" 
-          frameborder="0" 
-          style="width:100vw; height:100vh; position:fixed; top:0; left:0; z-index:9999;">
-  </iframe>
-</div>
+  <!-- 鼠标跟随光晕 -->
+  <div class="cursor-glow" id="cursorGlow"></div>
+  
+  <!-- 开屏动画容器 -->
+  <div id="splash-screen" class="splash-container">
+    <iframe src="splash/splash-01/splash.html" 
+            frameborder="0" 
+            style="width:100vw; height:100vh; position:fixed; top:0; left:0; z-index:9999; background:#FFFFFF;">
+    </iframe>
   </div>
   
   <!-- 主内容区 -->
@@ -34,12 +34,9 @@
     <!-- 导航栏 -->
     <nav class="navbar">
       <div class="nav-container">
-        <div class="nav-logo">
-          <span class="logo-text">Drifting Veil</span>
-        </div>
+        <div class="nav-logo">Drifting Veil</div>
         
         <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">
-          <span></span>
           <span></span>
           <span></span>
         </button>
@@ -54,27 +51,34 @@
     </nav>
     
     <!-- 主页区域 -->
-<section id="home" class="hero-section">
-  <div class="hero-container">
-    
-    <!-- 气泡背景 -->
-    <div class="bubbles-container" id="bubblesContainer"></div>
-    
-    <!-- 欢迎语 -->
-    <div class="hero-text">
-      <h1 class="hero-title-zh text-float" id="heroTitleZh">某某某的作品网站</h1>
-      <h2 class="hero-title-en text-shimmer glow-pulse" id="heroTitleEn">WELCOME</h2>
-      <p class="hero-subtitle breeze" id="heroSubtitle">探索我的创作世界</p>
-    </div>
-    
-    <!-- 角色卡片网格 -->
-    <div class="featured-cards" id="featuredCards">
-      <!-- 卡片将通过 JavaScript 动态生成 -->
-    </div>
-    
-  </div>
-</section>
+    <section id="home" class="hero-section">
+      
+      <!-- 点阵装饰 -->
+      <canvas class="dot-pattern" id="dotPattern"></canvas>
+      
+      <div class="hero-container">
         
+        <div class="hero-content">
+          <!-- 左侧文字 -->
+          <div class="hero-text">
+            <h1 class="hero-title-zh" id="heroTitleZh">现代文艺复兴</h1>
+            <h2 class="hero-title-en" id="heroTitleEn">WELCOME TO MY CREATIVE WORLD</h2>
+            <p class="hero-subtitle" id="heroSubtitle">探索角色设计的无限可能</p>
+          </div>
+          
+          <!-- 右侧装饰图片 -->
+          <div class="hero-visual">
+            <img src="assets/images/hero-visual.jpg" alt="Featured Work" class="hero-image" id="heroImage">
+          </div>
+        </div>
+        
+        <!-- 角色卡片网格 -->
+        <div class="featured-cards" id="featuredCards">
+          <!-- 卡片将通过 JavaScript 动态生成 -->
+        </div>
+        
+      </div>
+    </section>
     
     <!-- 页脚水印 -->
     <footer class="site-footer">
@@ -89,3 +93,4 @@
   
 </body>
 </html>
+
