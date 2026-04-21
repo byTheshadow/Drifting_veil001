@@ -1,4 +1,4 @@
-<!-- splash/splash-01/splash.html -->
+<!-- splash/splash-01/splash.html - 简化版 -->
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -10,49 +10,20 @@
 <body>
   <div class="splash-wrapper">
     
-    <!-- 背景层 -->
-    <div class="splash-bg"></div>
-    
-    <!-- 文件夹动画区 -->
-    <div class="folders-container">
-      <!-- 移动的文件夹 -->
-      <div class="folder folder-1">
-        <div class="folder-icon">📁</div>
-        <div class="folder-label">Projects</div>
-      </div>
-      <div class="folder folder-2">
-        <div class="folder-icon">📁</div>
-        <div class="folder-label">Gallery</div>
-      </div>
-      <div class="folder folder-3 folder-main">
-        <div class="folder-icon">📂</div>
-        <div class="folder-label">Characters</div>
-      </div>
-      <div class="folder folder-4">
-        <div class="folder-icon">📁</div>
-        <div class="folder-label">About</div>
-      </div>
+    <!-- 文件夹图标 -->
+    <div class="folder-icon">
+      <svg width="120" height="120" viewBox="0 0 120 120" fill="none">
+        <path d="M20 30C20 25.5817 23.5817 22 28 22H48L56 30H92C96.4183 30 100 33.5817 100 38V90C100 94.4183 96.4183 98 92 98H28C23.5817 98 20 94.4183 20 90V30Z" 
+              fill="#0071E3" stroke="#0071E3" stroke-width="2"/>
+      </svg>
     </div>
     
     <!-- 鼠标指针 -->
     <div class="cursor-pointer">
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
         <path d="M3 3L10.07 19.97L12.58 12.58L19.97 10.07L3 3Z" 
-              fill="currentColor" stroke="currentColor" stroke-width="2"/>
+              fill="#1D1D1F" stroke="#1D1D1F" stroke-width="1.5"/>
       </svg>
-    </div>
-    
-    <!-- 展开的内容 -->
-    <div class="folder-expand">
-      <div class="expand-content">
-        <div class="expand-title">Welcome</div>
-        <div class="expand-subtitle">进入作品世界</div>
-      </div>
-    </div>
-    
-    <!-- 加载进度 -->
-    <div class="loading-bar">
-      <div class="loading-progress"></div>
     </div>
     
   </div>
@@ -60,3 +31,4 @@
   <script src="splash.js"></script>
 </body>
 </html>
+
