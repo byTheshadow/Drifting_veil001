@@ -1,148 +1,15 @@
-// scripts/main.js
+// scripts/main.js - 完整版
 /**
- * 主脚本文件
+ * 主脚本文件 - Apple 风格
  * 作者：@玉元一shadow
- * 
- * 功能：初始化页面、加载数据、处理交互
  */
 
-// ===== 页面加载完成后初始化 =====
-// 更新 initPage 函数
-function initPage() {
-  console.log('🎨 Drifting Veil 初始化中...');
-  console.log('📦 当前主题:', CONFIG.theme);
-  console.log('✨ 作者:', CONFIG.author);
-  
-  // 设置作者水印
-  const authorElement = document.getElementById('authorName');
-  if (authorElement) {
-    authorElement.textContent = CONFIG.author;
-  }
-  
-  // 如果启用开屏动画
-  if (CONFIG.enableSplash) {
-    const splashContainer = document.getElementById('splash-screen');
-    const mainContent = document.getElementById('main-content');
-    
-    if (splashContainer && mainContent) {
-      mainContent.style.opacity = '0';
-      
-      // 动画结束后移除开屏并显示主内容
-      setTimeout(() => {
-        splashContainer.style.opacity = '0';
-        splashContainer.style.transition = 'opacity 0.5s ease';
-        
-        setTimeout(() => {
-          splashContainer.remove();
-          mainContent.style.opacity = '1';
-        }, 500);
-      }, CONFIG.splashDuration);
-    }
-  }
-}
-
-
-// ===== 导航栏交互 =====
-function initNavigation() {
-  const navbar = document.querySelector('.navbar');
-  const navToggle = document.getElementById('navToggle');
-  const navMenu = document.getElementById('navMenu');
-  const navLinks = document.querySelectorAll('.nav-link');
-  
-  // 滚动时添加阴影
-  window.addEventListener('scroll', () => {
-    if (window.scrollY > 50) {
-      navbar.classList.add('scrolled');
-    } else {
-      navbar.classList.remove('scrolled');
-    }
-  });
-  
-  // 移动端菜单切换
-  if (navToggle) {
-    navToggle.addEventListener('click', () => {
-      navMenu.classList.toggle('active');
-      
-      // 动画效果
-      const spans = navToggle.querySelectorAll('span');
-      if (navMenu.classList.contains('active')) {
-        spans[0].style.transform = 'rotate(45deg) translateY(7px)';
-        spans[1].style.opacity = '0';
-        spans[2].style.transform = 'rotate(-45deg) translateY(-7px)';
-      } else {
-        spans[0].style.transform = '';
-        spans[1].style.opacity = '1';
-        spans[2].style.transform = '';
-      }
-    });
-  }
-  
-  // 导航链接点击
-  navLinks.forEach(link => {
-    link.addEventListener('click', (e) => {
-      // 移除所有 active 类
-      navLinks.forEach(l => l.classList.remove('active'));
-      // 添加到当前链接
-      link.classList.add('active');
-      
-      // 移动端关闭菜单
-      if (window.innerWidth <= 768) {
-        navMenu.classList.remove('active');
-        const spans = navToggle.querySelectorAll('span');
-        spans[0].style.transform = '';
-        spans[1].style.opacity = '1';
-        spans[2].style.transform = '';
-      }
-    });
-  });
-}
-
-// ===== 滚动交互效果 =====
-function initScrollEffects() {
-  if (!CONFIG.animations.enableScrollEffects) return;
-  
-  const observerOptions = {
-    threshold: 0.1,
-    rootMargin: '0px 0px -100px 0px'
-  };
-  
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.style.opacity = '1';
-        entry.target.style.transform = 'translateY(0)';
-      }
-    });
-  }, observerOptions);
-  
-  // 观察所有卡片
-  const cards = document.querySelectorAll('.card');
-  cards.forEach(card => {
-    card.style.opacity = '0';
-    card.style.transform = 'translateY(30px)';
-    card.style.transition = 'all 0.6s ease';
-    observer.observe(card);
-  });
-}
-
-// ===== 加载个人信息数据 =====
-function loadProfileData() {
-  // 加载欢迎语
-  const titleZh = document.getElementById('heroTitleZh');
-  const titleEn = document.getElementById('heroTitleEn');
-  const subtitle = document// scripts/main.js
-/**
- * 主脚本文件
- * 作者：@玉元一shadow
- * 
- * 功能：初始化页面、加载数据、处理交互
- */
-
-// ===== 页面加载完成后初始化 =====
 document.addEventListener('DOMContentLoaded', () => {
   initPage();
   initNavigation();
   initScrollEffects();
+  initCursorGlow();
+  initDotPattern();
   loadProfileData();
   renderFeaturedCards();
 });
@@ -150,23 +17,29 @@ document.addEventListener('DOMContentLoaded', () => {
 // ===== 初始化页面 =====
 function initPage() {
   console.log('🎨 Drifting Veil 初始化中...');
-  console.log('📦 当前主题:', CONFIG.theme);
-  console.log('✨ 作者:', CONFIG.author);
   
-  // 设置作者水印
   const authorElement = document.getElementById('authorName');
   if (authorElement) {
     authorElement.textContent = CONFIG.author;
   }
   
-  // 如果启用开屏动画，延迟显示主内容
   if (CONFIG.enableSplash) {
+    const splashContainer = document.getElementById('splash-screen');
     const mainContent = document.getElementById('main-content');
-    mainContent.style.opacity = '0';
     
-    setTimeout(() => {
-      mainContent.style.opacity = '1';
-    }, CONFIG.splashDuration);
+    if (splashContainer && mainContent) {
+      mainContent.style.opacity = '0';
+      
+      setTimeout(() => {
+        splashContainer.style.opacity = '0';
+        splashContainer.style.transition = 'opacity 0.6s ease';
+        
+        setTimeout(() => {
+          splashContainer.remove();
+          mainContent.style.opacity = '1';
+        }, 600);
+      }, 3700);
+    }
   }
 }
 
@@ -177,30 +50,18 @@ function initNavigation() {
   const navMenu = document.getElementById('navMenu');
   const navLinks = document.querySelectorAll('.nav-link');
   
-  // 滚动时添加阴影
-  window.addEventListener('scroll', () => {
-    if (window.scrollY > 50) {
-      navbar.classList.add('scrolled');
-    } else {
-      navbar.classList.remove('scrolled');
-    }
-  });
-  
   // 移动端菜单切换
   if (navToggle) {
     navToggle.addEventListener('click', () => {
       navMenu.classList.toggle('active');
       
-      // 动画效果
       const spans = navToggle.querySelectorAll('span');
       if (navMenu.classList.contains('active')) {
-        spans[0].style.transform = 'rotate(45deg) translateY(7px)';
-        spans[1].style.opacity = '0';
-        spans[2].style.transform = 'rotate(-45deg) translateY(-7px)';
+        spans[0].style.transform = 'rotate(45deg) translateY(5px)';
+        spans[1].style.transform = 'rotate(-45deg) translateY(-5px)';
       } else {
         spans[0].style.transform = '';
-        spans[1].style.opacity = '1';
-        spans[2].style.transform = '';
+        spans[1].style.transform = '';
       }
     });
   }
@@ -208,18 +69,14 @@ function initNavigation() {
   // 导航链接点击
   navLinks.forEach(link => {
     link.addEventListener('click', (e) => {
-      // 移除所有 active 类
       navLinks.forEach(l => l.classList.remove('active'));
-      // 添加到当前链接
       link.classList.add('active');
       
-      // 移动端关闭菜单
       if (window.innerWidth <= 768) {
         navMenu.classList.remove('active');
         const spans = navToggle.querySelectorAll('span');
         spans[0].style.transform = '';
-        spans[1].style.opacity = '1';
-        spans[2].style.transform = '';
+        spans[1].style.transform = '';
       }
     });
   });
@@ -231,7 +88,7 @@ function initScrollEffects() {
   
   const observerOptions = {
     threshold: 0.1,
-    rootMargin: '0px 0px -100px 0px'
+    rootMargin: '0px 0px -50px 0px'
   };
   
   const observer = new IntersectionObserver((entries) => {
@@ -243,19 +100,120 @@ function initScrollEffects() {
     });
   }, observerOptions);
   
-  // 观察所有卡片
   const cards = document.querySelectorAll('.card');
-  cards.forEach(card => {
+  cards.forEach((card, index) => {
     card.style.opacity = '0';
     card.style.transform = 'translateY(30px)';
-    card.style.transition = 'all 0.6s ease';
+    card.style.transition = `all 0.6s ease ${index * 0.1}s`;
     observer.observe(card);
   });
 }
 
+// ===== 鼠标跟随光晕效果 =====
+function initCursorGlow() {
+  const cursorGlow = document.getElementById('cursorGlow');
+  if (!cursorGlow) return;
+  
+  let mouseX = 0;
+  let mouseY = 0;
+  let glowX = 0;
+  let glowY = 0;
+  
+  // 监听鼠标移动
+  document.addEventListener('mousemove', (e) => {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+  });
+  
+  // 平滑跟随动画
+  function animateGlow() {
+    const dx = mouseX - glowX;
+    const dy = mouseY - glowY;
+    
+    glowX += dx * 0.1;
+    glowY += dy * 0.1;
+    
+    cursorGlow.style.left = `${glowX - 200}px`;
+    cursorGlow.style.top = `${glowY - 200}px`;
+    
+    requestAnimationFrame(animateGlow);
+  }
+  
+  animateGlow();
+  
+  // 鼠标进入卡片时放大光晕
+  const cards = document.querySelectorAll('.card');
+  cards.forEach(card => {
+    card.addEventListener('mouseenter', () => {
+      cursorGlow.style.transform = 'scale(1.5)';
+      cursorGlow.style.opacity = '1';
+    });
+    
+    card.addEventListener('mouseleave', () => {
+      cursorGlow.style.transform = 'scale(1)';
+      cursorGlow.style.opacity = '0.6';
+    });
+  });
+}
+
+// ===== 点阵背景效果 =====
+function initDotPattern() {
+  const canvas = document.getElementById('dotPattern');
+  if (!canvas) return;
+  
+  const ctx = canvas.getContext('2d');
+  const dpr = window.devicePixelRatio || 1;
+  
+  // 设置画布尺寸
+  function resizeCanvas() {
+    canvas.width = 500 * dpr;
+    canvas.height = 500 * dpr;
+    canvas.style.width = '500px';
+    canvas.style.height = '500px';
+    ctx.scale(dpr, dpr);
+  }
+  
+  resizeCanvas();
+  
+  // 绘制点阵
+  function drawDots() {
+    ctx.clearRect(0, 0, 500, 500);
+    
+    const dotSize = 2;
+    const spacing = 8;
+    const cols = Math.floor(500 / spacing);
+    const rows = Math.floor(500 / spacing);
+    
+    for (let i = 0; i < cols; i++) {
+      for (let j = 0; j < rows; j++) {
+        const x = i * spacing;
+        const y = j * spacing;
+        
+        // 创建波浪效果
+        const distance = Math.sqrt(
+          Math.pow(x - 250, 2) + Math.pow(y - 250, 2)
+        );
+        const wave = Math.sin(distance * 0.02 + Date.now() * 0.001) * 0.5 + 0.5;
+        const opacity = wave * 0.6;
+        
+        ctx.fillStyle = `rgba(0, 113, 227, ${opacity})`;
+        ctx.beginPath();
+        ctx.arc(x, y, dotSize, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+    
+    requestAnimationFrame(drawDots);
+  }
+  
+  drawDots();
+  
+  // 响应窗口大小变化
+  window.addEventListener('resize', resizeCanvas);
+}
+
 // ===== 加载个人信息数据 =====
 function loadProfileData() {
-  // 加载欢迎语
   const titleZh = document.getElementById('heroTitleZh');
   const titleEn = document.getElementById('heroTitleEn');
   const subtitle = document.getElementById('heroSubtitle');
@@ -272,6 +230,19 @@ function loadProfileData() {
     subtitle.textContent = PROFILE.welcome.subtitle;
   } else if (subtitle && !PROFILE.welcome.subtitle) {
     subtitle.style.display = 'none';
+  }
+  
+  // 加载右侧装饰图片
+  const heroImage = document.getElementById('heroImage');
+  if (heroImage && PROFILE.heroImage) {
+    heroImage.src = PROFILE.heroImage;
+    heroImage.onerror = () => {
+      // 如果图片加载失败，隐藏整个视觉区域
+      const heroVisual = document.querySelector('.hero-visual');
+      if (heroVisual) {
+        heroVisual.style.display = 'none';
+      }
+    };
   }
 }
 
@@ -292,7 +263,6 @@ function renderFeaturedCards() {
 function createCard(data, index) {
   const card = document.createElement('div');
   card.className = 'card';
-  card.style.animationDelay = `${0.1 * index}s`;
   
   // 图片
   const img = document.createElement('img');
@@ -303,7 +273,7 @@ function createCard(data, index) {
   
   // 处理图片加载失败
   img.onerror = () => {
-    img.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="200" height="300"%3E%3Crect fill="%23353535" width="200" height="300"/%3E%3Ctext x="50%25" y="50%25" text-anchor="middle" fill="%23808080" font-size="14"%3E暂无图片%3C/text%3E%3C/svg%3E';
+    img.src = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='500'%3E%3Crect fill='%23F5F5F7' width='400' height='500'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' fill='%236E6E73' font-size='16' font-family='system-ui'%3E暂无图片%3C/text%3E%3C/svg%3E`;
   };
   
   // 覆盖层
@@ -329,6 +299,27 @@ function createCard(data, index) {
     handleCardClick(data);
   });
   
+  // 鼠标移动视差效果
+  card.addEventListener('mousemove', (e) => {
+    if (!CONFIG.animations.enableHoverEffects) return;
+    
+    const rect = card.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
+    
+    const rotateX = (y - centerY) / 20;
+    const rotateY = (centerX - x) / 20;
+    
+    img.style.transform = `scale(1.05) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+  });
+  
+  card.addEventListener('mouseleave', () => {
+    img.style.transform = '';
+  });
+  
   return card;
 }
 
@@ -336,16 +327,16 @@ function createCard(data, index) {
 function handleCardClick(data) {
   console.log('点击卡片:', data.name);
   // 后续可以添加模态框或跳转到详情页
-  // 目前先在控制台输出
 }
 
 // ===== 工具函数：平滑滚动 =====
 function smoothScrollTo(target) {
   const element = document.querySelector(target);
   if (element) {
-    element.scrollIntoView({
-      behavior: 'smooth',
-      block: 'start'
+    const offsetTop = element.offsetTop - 48; // 减去导航栏高度
+    window.scrollTo({
+      top: offsetTop,
+      behavior: 'smooth'
     });
   }
 }
@@ -356,50 +347,7 @@ window.DriftingVeil = {
   createCard,
   renderFeaturedCards
 };
-  // ===== 生成气泡效果 =====
-function createBubbles() {
-  const container = document.getElementById('bubblesContainer');
-  if (!container) return;
-  
-  const bubbleCount = 15; // 气泡数量
-  
-  for (let i = 0; i < bubbleCount; i++) {
-    const bubble = document.createElement('div');
-    bubble.className = 'bubble';
-    
-    // 随机大小
-    const size = Math.random() * 60 + 20; // 20-80px
-    bubble.style.width = `${size}px`;
-    bubble.style.height = `${size}px`;
-    
-    // 随机起始位置
-    bubble.style.left = `${Math.random() * 100}%`;
-    
-    // 随机动画时长
-    const duration = Math.random() * 10 + 8; // 8-18秒
-    bubble.style.animationDuration = `${duration}s`;
-    
-    // 随机延迟
-    const delay = Math.random() * 5;
-    bubble.style.animationDelay = `${delay}s`;
-    
-    // 随机漂移距离
-    const drift = (Math.random() - 0.5) * 100; // -50 到 50px
-    bubble.style.setProperty('--drift', `${drift}px`);
-    
-    container.appendChild(bubble);
-  }
-}
 
-// 在 DOMContentLoaded 中调用
-document.addEventListener('DOMContentLoaded', () => {
-  initPage();
-  initNavigation();
-  initScrollEffects();
-  loadProfileData();
-  renderFeaturedCards();
-  createBubbles(); // 添加这行
-});
 
 
 
