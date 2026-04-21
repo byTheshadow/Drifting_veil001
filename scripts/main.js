@@ -352,5 +352,50 @@ window.DriftingVeil = {
   createCard,
   renderFeaturedCards
 };
+  // ===== 生成气泡效果 =====
+function createBubbles() {
+  const container = document.getElementById('bubblesContainer');
+  if (!container) return;
+  
+  const bubbleCount = 15; // 气泡数量
+  
+  for (let i = 0; i < bubbleCount; i++) {
+    const bubble = document.createElement('div');
+    bubble.className = 'bubble';
+    
+    // 随机大小
+    const size = Math.random() * 60 + 20; // 20-80px
+    bubble.style.width = `${size}px`;
+    bubble.style.height = `${size}px`;
+    
+    // 随机起始位置
+    bubble.style.left = `${Math.random() * 100}%`;
+    
+    // 随机动画时长
+    const duration = Math.random() * 10 + 8; // 8-18秒
+    bubble.style.animationDuration = `${duration}s`;
+    
+    // 随机延迟
+    const delay = Math.random() * 5;
+    bubble.style.animationDelay = `${delay}s`;
+    
+    // 随机漂移距离
+    const drift = (Math.random() - 0.5) * 100; // -50 到 50px
+    bubble.style.setProperty('--drift', `${drift}px`);
+    
+    container.appendChild(bubble);
+  }
+}
+
+// 在 DOMContentLoaded 中调用
+document.addEventListener('DOMContentLoaded', () => {
+  initPage();
+  initNavigation();
+  initScrollEffects();
+  loadProfileData();
+  renderFeaturedCards();
+  createBubbles(); // 添加这行
+});
+
 
 
