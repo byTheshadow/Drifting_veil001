@@ -1,0 +1,90 @@
+/* styles/theme-blue-dream.css */
+/**
+ * 蓝色梦幻主题
+ * 
+ * 配色方案：
+ * 主色：#7090B0 雾霾蓝
+ * 背景：#202020 深灰黑 / #C0C0B0 浅灰米
+ * 辅助：#506080 深蓝灰 / #A0C0E0 浅天蓝
+ * 中性：#606060 中灰
+ */
+
+:root {
+  /* ===== 主色调 ===== */
+  --color-primary: #7090B0;
+  --color-primary-light: #A0C0E0;
+  --color-primary-dark: #506080;
+  
+  /* ===== 背景色 ===== */
+  --color-bg-primary: #202020;
+  --color-bg-secondary: #2a2a2a;
+  --color-bg-tertiary: #353535;
+  --color-bg-light: #C0C0B0;
+  --color-bg-overlay: rgba(32, 32, 32, 0.95);
+  
+  /* ===== 文字颜色 ===== */
+  --color-text-primary: #E0E0E0;
+  --color-text-secondary: #B0B0B0;
+  --color-text-tertiary: #808080;
+  --color-text-dark: #202020;
+  
+  /* ===== 强调色 ===== */
+  --color-accent: #7090B0;
+  --color-accent-hover: #A0C0E0;
+  --color-accent-light: #E0F0FF;
+  
+  /* ===== 中性色 ===== */
+  --color-neutral: #606060;
+  --color-border: rgba(112, 144, 176, 0.2);
+  --color-border-light: rgba(192, 192, 176, 0.3);
+  
+  /* ===== 阴影 ===== */
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.2);
+  --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.3);
+  --shadow-glow: 0 0 20px rgba(112, 144, 176, 0.3);
+  
+  /* ===== 毛玻璃效果 ===== */
+  --glass-bg: rgba(42, 42, 42, 0.7);
+  --glass-border: rgba(112, 144, 176, 0.2);
+  --glass-blur: blur(10px);
+  
+  /* ===== 圆角 ===== */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+  
+  /* ===== 间距 ===== */
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 48px;
+  
+  /* ===== 过渡 ===== */
+  --transition-fast: 0.2s ease;
+  --transition-normal: 0.3s ease;
+  --transition-slow: 0.5s ease;
+}
+
+/* ===== 全局背景 ===== */
+body {
+  background: var(--color-bg-primary);
+  color: var(--color-text-primary);
+}
+
+/* ===== 毛玻璃效果类 ===== */
+.glass {
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+}
+
+.glass-light {
+  background: rgba(192, 192, 176, 0.1);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--color-border-light);
+}
