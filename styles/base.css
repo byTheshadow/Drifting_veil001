@@ -1,12 +1,9 @@
-/* styles/base.css */
+/* styles/base.css - Apple 风格重构版 */
 /**
- * 基础样式文件
+ * 基础样式 - Apple 风格
  * 作者：@玉元一shadow
- * 
- * 包含：重置样式、全局设置、字体定义
  */
 
-/* ===== 重置样式 ===== */
 * {
   margin: 0;
   padding: 0;
@@ -19,37 +16,25 @@ html {
 }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans SC", 
-               "Microsoft YaHei", sans-serif;
-  line-height: 1.6;
+  font-family: var(--font-text);
+  line-height: 1.47059;
+  font-weight: 400;
+  letter-spacing: -0.022em;
   overflow-x: hidden;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
 }
 
-/* ===== 优雅字体设置 ===== */
-/* 中文标题字体 */
-.hero-title-zh,
-h1, h2, h3 {
-  font-family: "Noto Serif SC", "Source Han Serif SC", "STSong", serif;
-  font-weight: 500;
-  letter-spacing: 0.05em;
-}
-
-/* 英文标题字体 */
-.hero-title-en,
-.nav-logo,
-.logo-text {
-  font-family: "Playfair Display", "Cinzel", "Cormorant Garamond", serif;
+/* ===== 字体设置 ===== */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
   font-weight: 600;
-  letter-spacing: 0.1em;
+  letter-spacing: -0.015em;
 }
 
 /* ===== 通用工具类 ===== */
 .container {
-  max-width: 1200px;
+  max-width: 1440px;
   margin: 0 auto;
-  padding: 0 20px;
+  padding: 0 max(22px, env(safe-area-inset-right));
 }
 
 img {
@@ -61,7 +46,7 @@ img {
 a {
   text-decoration: none;
   color: inherit;
-  transition: all 0.3s ease;
+  transition: all var(--transition-fast);
 }
 
 button {
@@ -71,62 +56,24 @@ button {
   font-family: inherit;
 }
 
-/* ===== 滚动条样式 ===== */
+/* ===== 滚动条 ===== */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 10px;
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--color-bg-primary);
+  background: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--color-accent);
-  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  border: 2px solid transparent;
+  background-clip: content-box;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--color-accent-hover);
+  background: rgba(0, 0, 0, 0.3);
+  background-clip: content-box;
 }
 
-/* ===== 动画关键帧 ===== */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes slideInFromLeft {
-  from {
-    opacity: 0;
-    transform: translateX(-30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-@keyframes scaleIn {
-  from {
-    opacity: 0;
-    transform: scale(0.9);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
-/* ===== 响应式断点 ===== */
-/* 
-  Mobile: < 768px
-  Tablet: 768px - 1024px
-  Desktop: > 1024px
-*/
