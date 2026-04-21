@@ -1,0 +1,163 @@
+/* styles/animations.css - 新文件 */
+/**
+ * 动画效果文件
+ * 包含：气泡动画、文字效果等
+ */
+
+/* ===== 气泡容器 ===== */
+.bubbles-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* ===== 单个气泡 ===== */
+.bubble {
+  position: absolute;
+  bottom: -100px;
+  background: var(--gradient-bubble);
+  border-radius: var(--radius-full);
+  opacity: 0.6;
+  animation: rise linear infinite;
+  box-shadow: 
+    inset 0 0 20px rgba(255, 255, 255, 0.5),
+    0 0 20px rgba(135, 206, 235, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+/* 气泡上升动画 */
+@keyframes rise {
+  0% {
+    bottom: -100px;
+    transform: translateX(0) scale(1);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.6;
+  }
+  90% {
+    opacity: 0.6;
+  }
+  100% {
+    bottom: 110vh;
+    transform: translateX(var(--drift)) scale(0.8);
+    opacity: 0;
+  }
+}
+
+/* 气泡摇摆动画 */
+@keyframes sway {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(30px);
+  }
+}
+
+/* ===== 文字闪烁光效 ===== */
+.text-shimmer {
+  position: relative;
+  background: linear-gradient(
+    90deg,
+    var(--color-text-primary) 0%,
+    var(--color-accent) 50%,
+    var(--color-text-primary) 100%
+  );
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: shimmer 3s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+/* ===== 文字浮动效果 ===== */
+.text-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+/* ===== 水波纹效果 ===== */
+.ripple {
+  position: relative;
+  overflow: hidden;
+}
+
+.ripple::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: var(--radius-full);
+  background: rgba(91, 155, 213, 0.3);
+  transform: translate(-50%, -50%);
+  animation: ripple-effect 2s ease-out infinite;
+}
+
+@keyframes ripple-effect {
+  0% {
+    width: 0;
+    height: 0;
+    opacity: 0.5;
+  }
+  100% {
+    width: 300px;
+    height: 300px;
+    opacity: 0;
+  }
+}
+
+/* ===== 光晕脉动 ===== */
+.glow-pulse {
+  animation: glow-pulse 2s ease-in-out infinite;
+}
+
+@keyframes glow-pulse {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(91, 155, 213, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 40px rgba(91, 155, 213, 0.6);
+  }
+}
+
+/* ===== 夏日微风效果 ===== */
+.breeze {
+  animation: breeze 4s ease-in-out infinite;
+}
+
+@keyframes breeze {
+  0%, 100% {
+    transform: translateX(0) rotate(0deg);
+  }
+  25% {
+    transform: translateX(5px) rotate(1deg);
+  }
+  75% {
+    transform: translateX(-5px) rotate(-1deg);
+  }
+}
