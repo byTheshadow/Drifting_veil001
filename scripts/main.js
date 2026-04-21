@@ -7,15 +7,7 @@
  */
 
 // ===== 页面加载完成后初始化 =====
-document.addEventListener('DOMContentLoaded', () => {
-  initPage();
-  initNavigation();
-  initScrollEffects();
-  loadProfileData();
-  renderFeaturedCards();
-});
-
-// ===== 初始化页面 =====
+// 更新 initPage 函数
 function initPage() {
   console.log('🎨 Drifting Veil 初始化中...');
   console.log('📦 当前主题:', CONFIG.theme);
@@ -27,16 +19,28 @@ function initPage() {
     authorElement.textContent = CONFIG.author;
   }
   
-  // 如果启用开屏动画，延迟显示主内容
+  // 如果启用开屏动画
   if (CONFIG.enableSplash) {
+    const splashContainer = document.getElementById('splash-screen');
     const mainContent = document.getElementById('main-content');
-    mainContent.style.opacity = '0';
     
-    setTimeout(() => {
-      mainContent.style.opacity = '1';
-    }, CONFIG.splashDuration);
+    if (splashContainer && mainContent) {
+      mainContent.style.opacity = '0';
+      
+      // 动画结束后移除开屏并显示主内容
+      setTimeout(() => {
+        splashContainer.style.opacity = '0';
+        splashContainer.style.transition = 'opacity 0.5s ease';
+        
+        setTimeout(() => {
+          splashContainer.remove();
+          mainContent.style.opacity = '1';
+        }, 500);
+      }, CONFIG.splashDuration);
+    }
   }
 }
+
 
 // ===== 导航栏交互 =====
 function initNavigation() {
