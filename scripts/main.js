@@ -1,17 +1,18 @@
-// scripts/main.js - 完整版
+// scripts/main.js
 /**
- * 主脚本文件 - Apple 风格
+ * 主脚本文件 - 优雅简约版
  * 作者：@玉元一shadow
  */
 
 document.addEventListener('DOMContentLoaded', () => {
   initPage();
   initNavigation();
-  initScrollEffects();
-  initCursorGlow();
-  initDotPattern();
+  initGSAPAnimations();
   loadProfileData();
+  renderTags();
   renderFeaturedCards();
+  initParallaxEffect();
+  initScrollAnimations();
 });
 
 // ===== 初始化页面 =====
@@ -45,20 +46,18 @@ function initPage() {
 
 // ===== 导航栏交互 =====
 function initNavigation() {
-  const navbar = document.querySelector('.navbar');
   const navToggle = document.getElementById('navToggle');
   const navMenu = document.getElementById('navMenu');
   const navLinks = document.querySelectorAll('.nav-link');
   
-  // 移动端菜单切换
   if (navToggle) {
     navToggle.addEventListener('click', () => {
       navMenu.classList.toggle('active');
       
       const spans = navToggle.querySelectorAll('span');
       if (navMenu.classList.contains('active')) {
-        spans[0].style.transform = 'rotate(45deg) translateY(5px)';
-        spans[1].style.transform = 'rotate(-45deg) translateY(-5px)';
+        spans[0].style.transform = 'rotate(45deg) translateY(7px)';
+        spans[1].style.transform = 'rotate(-45deg) translateY(-7px)';
       } else {
         spans[0].style.transform = '';
         spans[1].style.transform = '';
@@ -66,11 +65,14 @@ function initNavigation() {
     });
   }
   
-  // 导航链接点击
   navLinks.forEach(link => {
     link.addEventListener('click', (e) => {
+      e.preventDefault();
       navLinks.forEach(l => l.classList.remove('active'));
       link.classList.add('active');
+      
+      const target = link.getAttribute('href');
+      smoothScrollTo(target);
       
       if (window.innerWidth <= 768) {
         navMenu.classList.remove('active');
@@ -82,168 +84,255 @@ function initNavigation() {
   });
 }
 
-// ===== 滚动交互效果 =====
-function initScrollEffects() {
-  if (!CONFIG.animations.enableScrollEffects) return;
+// ===== GSAP 入场动画 =====
+function initGSAPAnimations() {
+  if (typeof gsap === 'undefined') {
+    console.warn('GSAP 未加载，跳过动画');
+    return;
+  }
   
-  const observerOptions = {
-    threshold: 0.1,
-    rootMargin: '0px 0px -50px 0px'
-  };
+  // 注册 ScrollTrigger 插件
+  gsap.registerPlugin(ScrollTrigger);
   
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.style.opacity = '1';
-        entry.target.style.transform = 'translateY(0)';
-      }
-    });
-  }, observerOptions);
+  // 标题入场动画
+  gsap.from(".hero-title-en", { 
+    opacity: 0, 
+    y: 50, 
+    duration: 1.5, 
+    ease: "power4.out",
+    delay: 0.3
+  });
   
-  const cards = document.querySelectorAll('.card');
-  cards.forEach((card, index) => {
-    card.style.opacity = '0';
-    card.style.transform = 'translateY(30px)';
-    card.style.transition = `all 0.6s ease ${index * 0.1}s`;
-    observer.observe(card);
+  gsap.from(".hero-title-zh", { 
+    opacity: 0, 
+    y: 20, 
+    duration: 1.5, 
+    delay: 0.5,
+    ease: "power4.out"
+  });
+  
+  // 中心图片入场动画
+  gsap.from(".center-frame", { 
+    scale: 0.8, 
+    opacity: 0, 
+    duration: 2, 
+    ease: "elastic.out(1, 0.5)",
+    delay: 0.4
+  });
+  
+  // 标签入场动画
+  gsap.from(".tag-item", { 
+    opacity: 0, 
+    scale: 0.8,
+    stagger: 0.1, 
+    duration: 1,
+    delay: 0.8,
+    ease: "back.out(1.7)"
+  });
+  
+  // 滚动提示动画
+  gsap.from(".scroll-hint", {
+    opacity: 0,
+    y: -20,
+    duration: 1,
+    delay: 1.5
   });
 }
 
-// ===== 鼠标跟随光晕效果 =====
-function initCursorGlow() {
-  const cursorGlow = document.getElementById('cursorGlow');
-  if (!cursorGlow) return;
+// ===== 视差效果（鼠标跟随）=====
+function initParallaxEffect() {
+  const centerFrame = document.getElementById('centerFrame');
+  const tagOrbit = document.getElementById('tagOrbit');
+  const mainTitle = document.getElementById('mainTitle');
   
-  let mouseX = 0;
-  let mouseY = 0;
-  let glowX = 0;
-  let glowY = 0;
+  if (!centerFrame || !tagOrbit) return;
   
-  // 监听鼠标移动
   document.addEventListener('mousemove', (e) => {
-    mouseX = e.clientX;
-    mouseY = e.clientY;
-  });
-  
-  // 平滑跟随动画
-  function animateGlow() {
-    const dx = mouseX - glowX;
-    const dy = mouseY - glowY;
+    const x = (window.innerWidth / 2 - e.pageX) / 30;
+    const y = (window.innerHeight / 2 - e.pageY) / 30;
     
-    glowX += dx * 0.1;
-    glowY += dy * 0.1;
-    
-    cursorGlow.style.left = `${glowX - 200}px`;
-    cursorGlow.style.top = `${glowY - 200}px`;
-    
-    requestAnimationFrame(animateGlow);
-  }
-  
-  animateGlow();
-  
-  // 鼠标进入卡片时放大光晕
-  const cards = document.querySelectorAll('.card');
-  cards.forEach(card => {
-    card.addEventListener('mouseenter', () => {
-      cursorGlow.style.transform = 'scale(1.5)';
-      cursorGlow.style.opacity = '1';
-    });
-    
-    card.addEventListener('mouseleave', () => {
-      cursorGlow.style.transform = 'scale(1)';
-      cursorGlow.style.opacity = '0.6';
-    });
-  });
-}
-
-// ===== 点阵背景效果 =====
-function initDotPattern() {
-  const canvas = document.getElementById('dotPattern');
-  if (!canvas) return;
-  
-  const ctx = canvas.getContext('2d');
-  const dpr = window.devicePixelRatio || 1;
-  
-  // 设置画布尺寸
-  function resizeCanvas() {
-    canvas.width = 500 * dpr;
-    canvas.height = 500 * dpr;
-    canvas.style.width = '500px';
-    canvas.style.height = '500px';
-    ctx.scale(dpr, dpr);
-  }
-  
-  resizeCanvas();
-  
-  // 绘制点阵
-  function drawDots() {
-    ctx.clearRect(0, 0, 500, 500);
-    
-    const dotSize = 2;
-    const spacing = 8;
-    const cols = Math.floor(500 / spacing);
-    const rows = Math.floor(500 / spacing);
-    
-    for (let i = 0; i < cols; i++) {
-      for (let j = 0; j < rows; j++) {
-        const x = i * spacing;
-        const y = j * spacing;
-        
-        // 创建波浪效果
-        const distance = Math.sqrt(
-          Math.pow(x - 250, 2) + Math.pow(y - 250, 2)
-        );
-        const wave = Math.sin(distance * 0.02 + Date.now() * 0.001) * 0.5 + 0.5;
-        const opacity = wave * 0.6;
-        
-        ctx.fillStyle = `rgba(0, 113, 227, ${opacity})`;
-        ctx.beginPath();
-        ctx.arc(x, y, dotSize, 0, Math.PI * 2);
-        ctx.fill();
+    // 中心图片 3D 旋转
+    if (typeof gsap !== 'undefined') {
+      gsap.to(centerFrame, {
+        rotationY: x,
+        rotationX: -y,
+        transformPerspective: 1000,
+        duration: 0.5,
+        ease: "power2.out"
+      });
+      
+      // 轨道轻微移动
+      gsap.to(tagOrbit, {
+        x: x * 2,
+        y: y * 2,
+        duration: 0.8,
+        ease: "power2.out"
+      });
+      
+      // 标题轻微移动
+      if (mainTitle) {
+        gsap.to(mainTitle, {
+          x: -x * 1.5,
+          y: -y * 1.5,
+          duration: 0.6,
+          ease: "power2.out"
+        });
       }
     }
+  });
+  
+  // 标签悬停时暂停旋转
+  const tags = document.querySelectorAll('.tag-item');
+  tags.forEach(tag => {
+    tag.addEventListener('mouseenter', () => {
+      if (typeof gsap !== 'undefined') {
+        gsap.set(tagOrbit, { animationPlayState: "paused" });
+        gsap.set(".tag-item", { animationPlayState: "paused" });
+      }
+    });
     
-    requestAnimationFrame(drawDots);
+    tag.addEventListener('mouseleave', () => {
+      if (typeof gsap !== 'undefined') {
+        gsap.set(tagOrbit, { animationPlayState: "running" });
+        gsap.set(".tag-item", { animationPlayState: "running" });
+      }
+    });
+  });
+}
+
+// ===== 滚动动画 =====
+function initScrollAnimations() {
+  if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') {
+    return;
   }
   
-  drawDots();
+  // 滚动时中心图放大并淡出
+  gsap.to(".center-frame", {
+    scrollTrigger: {
+      trigger: ".hero-section",
+      start: "top top",
+      end: "bottom top",
+      scrub: true
+    },
+    scale: 1.5,
+    opacity: 0,
+    y: -100
+  });
   
-  // 响应窗口大小变化
-  window.addEventListener('resize', resizeCanvas);
+  // 滚动时标题移动并淡出
+  gsap.to(".main-title", {
+    scrollTrigger: {
+      trigger: ".hero-section",
+      start: "top top",
+      end: "bottom top",
+      scrub: true
+    },
+    y: 200,
+    opacity: 0
+  });
+  
+  // 滚动时轨道淡出
+  gsap.to(".tag-orbit", {
+    scrollTrigger: {
+      trigger: ".hero-section",
+      start: "top top",
+      end: "bottom top",
+      scrub: true
+    },
+    opacity: 0,
+    scale: 1.3
+  });
+  
+  // 卡片滚动渐入
+  gsap.from(".card", {
+    scrollTrigger: {
+      trigger: ".featured-cards",
+      start: "top 80%",
+      end: "bottom 20%",
+      toggleActions: "play none none reverse"
+    },
+    opacity: 0,
+    y: 50,
+    stagger: 0.1,
+    duration: 0.8,
+    ease: "power2.out"
+  });
+  
+  // 区块标题动画
+  gsap.from(".section-title", {
+    scrollTrigger: {
+      trigger: ".section-title",
+      start: "top 85%",
+      toggleActions: "play none none reverse"
+    },
+    opacity: 0,
+    y: 30,
+    duration: 1,
+    ease: "power3.out"
+  });
 }
 
 // ===== 加载个人信息数据 =====
 function loadProfileData() {
-  const titleZh = document.getElementById('heroTitleZh');
   const titleEn = document.getElementById('heroTitleEn');
-  const subtitle = document.getElementById('heroSubtitle');
-  
-  if (titleZh && PROFILE.welcome.line1) {
-    titleZh.textContent = PROFILE.welcome.line1;
-  }
-  
-  if (titleEn && PROFILE.welcome.line2) {
-    titleEn.textContent = PROFILE.welcome.line2;
-  }
-  
-  if (subtitle && PROFILE.welcome.subtitle) {
-    subtitle.textContent = PROFILE.welcome.subtitle;
-  } else if (subtitle && !PROFILE.welcome.subtitle) {
-    subtitle.style.display = 'none';
-  }
-  
-  // 加载右侧装饰图片
+  const titleZh = document.getElementById('heroTitleZh');
   const heroImage = document.getElementById('heroImage');
+  
+  if (titleEn && PROFILE.welcome.line1) {
+    titleEn.textContent = PROFILE.welcome.line1;
+  }
+  
+  if (titleZh && PROFILE.welcome.line2) {
+    titleZh.textContent = PROFILE.welcome.line2;
+  }
+  
   if (heroImage && PROFILE.heroImage) {
     heroImage.src = PROFILE.heroImage;
     heroImage.onerror = () => {
-      // 如果图片加载失败，隐藏整个视觉区域
-      const heroVisual = document.querySelector('.hero-visual');
-      if (heroVisual) {
-        heroVisual.style.display = 'none';
-      }
+      // 图片加载失败时使用占位图
+      heroImage.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="450" height="450"%3E%3Crect fill="%23EFF5FB" width="450" height="450"/%3E%3Ctext x="50%25" y="50%25" text-anchor="middle" fill="%235A7A9A" font-size="18" font-family="system-ui"%3E暂无图片%3C/text%3E%3C/svg%3E';
     };
   }
+}
+
+// ===== 渲染环绕标签 =====
+function renderTags() {
+  const tagOrbit = document.getElementById('tagOrbit');
+  if (!tagOrbit || !PROFILE.tags) return;
+  
+  tagOrbit.innerHTML = '';
+  
+  const tagCount = PROFILE.tags.length;
+  const radius = 350; // 轨道半径
+  
+  PROFILE.tags.forEach((tag, index) => {
+    const tagElement = document.createElement('div');
+    tagElement.className = 'tag-item';
+    
+    // 计算标签位置（均匀分布在圆周上）
+    const angle = (360 / tagCount) * index;
+    const radian = (angle * Math.PI) / 180;
+    const x = Math.cos(radian) * radius;
+    const y = Math.sin(radian) * radius;
+    
+    tagElement.style.left = `calc(50% + ${x}px)`;
+    tagElement.style.top = `calc(50% + ${y}px)`;
+    tagElement.style.transform = 'translate(-50%, -50%)';
+    
+    // 创建标签内容
+    const shortSpan = document.createElement('span');
+    shortSpan.className = 'tag-short';
+    shortSpan.textContent = tag.short;
+    
+    const fullSpan = document.createElement('span');
+    fullSpan.className = 'tag-full';
+    fullSpan.textContent = ` - ${tag.full}`;
+    
+    tagElement.appendChild(shortSpan);
+    tagElement.appendChild(fullSpan);
+    
+    tagOrbit.appendChild(tagElement);
+  });
 }
 
 // ===== 渲染特色卡片 =====
@@ -273,7 +362,7 @@ function createCard(data, index) {
   
   // 处理图片加载失败
   img.onerror = () => {
-    img.src = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='500'%3E%3Crect fill='%23F5F5F7' width='400' height='500'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' fill='%236E6E73' font-size='16' font-family='system-ui'%3E暂无图片%3C/text%3E%3C/svg%3E`;
+    img.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="400" height="500"%3E%3Crect fill="%23EFF5FB" width="400" height="500"/%3E%3Ctext x="50%25" y="50%25" text-anchor="middle" fill="%235A7A9A" font-size="16" font-family="system-ui"%3E暂无图片%3C/text%3E%3C/svg%3E';
   };
   
   // 覆盖层
@@ -310,14 +399,33 @@ function createCard(data, index) {
     const centerX = rect.width / 2;
     const centerY = rect.height / 2;
     
-    const rotateX = (y - centerY) / 20;
-    const rotateY = (centerX - x) / 20;
+    const rotateX = (y - centerY) / 15;
+    const rotateY = (centerX - x) / 15;
     
-    img.style.transform = `scale(1.05) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+    if (typeof gsap !== 'undefined') {
+      gsap.to(img, {
+        rotationX: rotateX,
+        rotationY: rotateY,
+        transformPerspective: 1000,
+        duration: 0.3,
+        ease: "power2.out"
+      });
+    } else {
+      img.style.transform = `scale(1.05) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+    }
   });
   
   card.addEventListener('mouseleave', () => {
-    img.style.transform = '';
+    if (typeof gsap !== 'undefined') {
+      gsap.to(img, {
+        rotationX: 0,
+        rotationY: 0,
+        duration: 0.5,
+        ease: "power2.out"
+      });
+    } else {
+      img.style.transform = '';
+    }
   });
   
   return card;
@@ -327,13 +435,15 @@ function createCard(data, index) {
 function handleCardClick(data) {
   console.log('点击卡片:', data.name);
   // 后续可以添加模态框或跳转到详情页
+  // 示例：打开模态框显示详情
+  // showModal(data);
 }
 
 // ===== 工具函数：平滑滚动 =====
 function smoothScrollTo(target) {
   const element = document.querySelector(target);
   if (element) {
-    const offsetTop = element.offsetTop - 48; // 减去导航栏高度
+    const offsetTop = element.offsetTop - 60; // 减去导航栏高度
     window.scrollTo({
       top: offsetTop,
       behavior: 'smooth'
@@ -345,8 +455,10 @@ function smoothScrollTo(target) {
 window.DriftingVeil = {
   smoothScrollTo,
   createCard,
-  renderFeaturedCards
+  renderFeaturedCards,
+  renderTags
 };
+
 
 
 
