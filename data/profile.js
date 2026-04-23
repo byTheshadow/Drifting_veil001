@@ -7,7 +7,7 @@ window.PROFILE_DATA = {
     },
     
     // 背景图 URL（用户可以替换为自己的图片，留空则不显示）
-    heroBackground: "assets/images/hero-background.jpg",
+    heroBackground: "",  // 例如: "assets/images/hero-background.jpg"
     
     // 环绕标签（可增删）
     tags: [
