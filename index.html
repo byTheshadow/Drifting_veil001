@@ -929,15 +929,9 @@
             }
         }
 
-        // ================= 渲染标签 - 完全修复版 =================
+       // ================= 渲染标签 - 完全修复版 =================
 function renderTags(tags) {
-    // 找到正确的容器
-    let tagsContainer = document.querySelector('.tags-container');
-    
-    if (!tagsContainer) {
-        // 如果没有 .tags-container，尝试查找 #tagsContainer
-        tagsContainer = document.getElementById('tagsContainer');
-    }
+    const tagsContainer = document.getElementById('tagsContainer');
     
     if (!tagsContainer) {
         console.error('❌ 找不到标签容器！');
@@ -951,17 +945,18 @@ function renderTags(tags) {
         return;
     }
 
-    const containerSize = 700; // 容器大小
-    const orbitRadius = 280;   // 轨道半径（从中心到标签的距离）
-    const centerX = containerSize / 2; // 中心点 X
-    const centerY = containerSize / 2; // 中心点 Y
+    // 容器尺寸：700px x 700px
+    const containerSize = 700;
+    const centerX = containerSize / 2;  // 350px
+    const centerY = containerSize / 2;  // 350px
+    const orbitRadius = 250;  // 轨道半径，确保标签在容器内
 
     tags.forEach((tag, index) => {
         const tagElement = document.createElement('div');
         tagElement.className = 'tag-item';
         
-        // 计算圆形分布的角度
-        const angle = (index / tags.length) * Math.PI * 2 - Math.PI / 2; // 从顶部开始
+        // 计算圆形分布的角度（从顶部开始，顺时针）
+        const angle = (index / tags.length) * Math.PI * 2 - Math.PI / 2;
         
         // 计算标签位置（相对于容器中心）
         const x = centerX + Math.cos(angle) * orbitRadius;
@@ -971,7 +966,7 @@ function renderTags(tags) {
         tagElement.style.left = x + 'px';
         tagElement.style.top = y + 'px';
         
-        // 强制设置可见性
+        // 强制设置可见性和层级
         tagElement.style.opacity = '1';
         tagElement.style.visibility = 'visible';
         tagElement.style.display = 'block';
@@ -988,18 +983,18 @@ function renderTags(tags) {
 
         // 悬停效果
         tagElement.addEventListener('mouseenter', () => {
-            if (cursor) cursor.classList.add('hover');
+            if (typeof cursor !== 'undefined') cursor.classList.add('hover');
         });
         tagElement.addEventListener('mouseleave', () => {
-            if (cursor) cursor.classList.remove('hover');
+            if (typeof cursor !== 'undefined') cursor.classList.remove('hover');
         });
         
-        console.log(`标签 ${index} (${tag.short}): left=${x}px, top=${y}px`);
+        console.log(`标签 ${index} (${tag.short}): left=${x.toFixed(0)}px, top=${y.toFixed(0)}px`);
     });
 
     console.log(`✅ 已渲染 ${tags.length} 个标签`);
     
-    // 立即强制所有标签可见
+    // 立即强制所有标签可见（双重保险）
     setTimeout(() => {
         document.querySelectorAll('.tag-item').forEach(tag => {
             tag.style.opacity = '1';
