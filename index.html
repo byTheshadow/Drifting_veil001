@@ -929,50 +929,87 @@
             }
         }
 
-        // ================= 渲染标签 - 修复版 =================
-        function renderTags(tags) {
-            const tagsContainer = document.getElementById('tagsContainer');
-            tagsContainer.innerHTML = ''; // 清空
-            
-            if (!tags || tags.length === 0) {
-                console.warn('没有标签数据');
-                return;
-            }
+        // ================= 渲染标签 - 完全修复版 =================
+function renderTags(tags) {
+    // 找到正确的容器
+    let tagsContainer = document.querySelector('.tags-container');
+    
+    if (!tagsContainer) {
+        // 如果没有 .tags-container，尝试查找 #tagsContainer
+        tagsContainer = document.getElementById('tagsContainer');
+    }
+    
+    if (!tagsContainer) {
+        console.error('❌ 找不到标签容器！');
+        return;
+    }
+    
+    tagsContainer.innerHTML = ''; // 清空
+    
+    if (!tags || tags.length === 0) {
+        console.warn('没有标签数据');
+        return;
+    }
 
-            const orbitRadius = 350;
+    const containerSize = 700; // 容器大小
+    const orbitRadius = 280;   // 轨道半径（从中心到标签的距离）
+    const centerX = containerSize / 2; // 中心点 X
+    const centerY = containerSize / 2; // 中心点 Y
 
-            tags.forEach((tag, index) => {
-                const tagElement = document.createElement('div');
-                tagElement.className = 'tag-item';
-                
-                // 计算位置
-                const angle = (index / tags.length) * Math.PI * 2 - Math.PI / 2;
-                const x = 350 + Math.cos(angle) * orbitRadius;
-                const y = 350 + Math.sin(angle) * orbitRadius;
-                
-                tagElement.style.left = x + 'px';
-                tagElement.style.top = y + 'px';
-                
-                // 设置内容
-                tagElement.innerHTML = `
-                    <span class="tag-short">${tag.short}</span>
-                    <span class="tag-full">${tag.full}</span>
-                `;
-                
-                // 添加到容器
-                tagsContainer.appendChild(tagElement);
+    tags.forEach((tag, index) => {
+        const tagElement = document.createElement('div');
+        tagElement.className = 'tag-item';
+        
+        // 计算圆形分布的角度
+        const angle = (index / tags.length) * Math.PI * 2 - Math.PI / 2; // 从顶部开始
+        
+        // 计算标签位置（相对于容器中心）
+        const x = centerX + Math.cos(angle) * orbitRadius;
+        const y = centerY + Math.sin(angle) * orbitRadius;
+        
+        // 设置位置
+        tagElement.style.left = x + 'px';
+        tagElement.style.top = y + 'px';
+        
+        // 强制设置可见性
+        tagElement.style.opacity = '1';
+        tagElement.style.visibility = 'visible';
+        tagElement.style.display = 'block';
+        tagElement.style.zIndex = '20';
+        
+        // 设置内容
+        tagElement.innerHTML = `
+            <span class="tag-short">${tag.short}</span>
+            <span class="tag-full">${tag.full}</span>
+        `;
+        
+        // 添加到容器
+        tagsContainer.appendChild(tagElement);
 
-                // 悬停效果
-                tagElement.addEventListener('mouseenter', () => {
-                    cursor.classList.add('hover');
-                });
-                tagElement.addEventListener('mouseleave', () => {
-                    cursor.classList.remove('hover');
-                });
-            });
+        // 悬停效果
+        tagElement.addEventListener('mouseenter', () => {
+            if (cursor) cursor.classList.add('hover');
+        });
+        tagElement.addEventListener('mouseleave', () => {
+            if (cursor) cursor.classList.remove('hover');
+        });
+        
+        console.log(`标签 ${index} (${tag.short}): left=${x}px, top=${y}px`);
+    });
 
-            console.log(`✅ 已渲染 ${tags.length} 个标签`);
-        }
+    console.log(`✅ 已渲染 ${tags.length} 个标签`);
+    
+    // 立即强制所有标签可见
+    setTimeout(() => {
+        document.querySelectorAll('.tag-item').forEach(tag => {
+            tag.style.opacity = '1';
+            tag.style.visibility = 'visible';
+            tag.style.display = 'block';
+            tag.style.zIndex = '20';
+        });
+        console.log('✅ 强制标签可见完成');
+    }, 50);
+}
 
         // ================= 鼠标视差效果 =================
         function initParallax() {
