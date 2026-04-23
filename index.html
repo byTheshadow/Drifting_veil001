@@ -400,7 +400,7 @@
             to { transform: rotate(360deg) rotateX(70deg); }
         }
 
-        /* 环绕标签系统 */
+        /* 环绕标签系统 - 修复版 */
         .tags-orbit {
             position: absolute;
             top: 50%;
@@ -410,7 +410,7 @@
             margin-left: -350px;
             margin-top: -350px;
             z-index: 6;
-            pointer-events: none;
+            pointer-events: none; /* 容器不接收事件 */
         }
 
         .tags-container {
@@ -434,8 +434,12 @@
             box-shadow: 0 5px 20px rgba(165, 200, 237, 0.2);
             white-space: nowrap;
             border: 1px solid rgba(165, 200, 237, 0.3);
-            pointer-events: auto;
+            pointer-events: auto; /* 标签本身接收事件 */
             transform: translate(-50%, -50%);
+            /* 移除可能导致消失的动画 */
+            animation: none !important;
+            opacity: 1 !important;
+            visibility: visible !important;
         }
 
         .tag-item:hover {
@@ -753,7 +757,7 @@
         animateCursor();
 
         // 悬停效果
-        document.querySelectorAll('a, .tag-item, .cta-button').forEach(el => {
+        document.querySelectorAll('a, .cta-button').forEach(el => {
             el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
             el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
         });
@@ -782,11 +786,15 @@
             document.getElementById('heroTitle').textContent = profileData.welcome.line1;
             document.getElementById('heroSubtitle').textContent = profileData.welcome.line2;
             
-            // 设置背景图
+            // 设置背景图（支持 URL）
             const bgImg = document.getElementById('heroBackgroundImg');
-            if (profileData.heroBackground) {
+            if (profileData.heroBackground && profileData.heroBackground.trim() !== "") {
                 bgImg.src = profileData.heroBackground;
                 bgImg.style.display = 'block';
+                bgImg.onerror = () => {
+                    console.warn('背景图加载失败:', profileData.heroBackground);
+                    bgImg.style.display = 'none';
+                };
             }
 
             // 生成星星
@@ -818,15 +826,23 @@
             }
         }
 
-        // ================= 渲染标签 =================
+        // ================= 渲染标签 - 修复版 =================
         function renderTags(tags) {
             const tagsContainer = document.getElementById('tagsContainer');
+            tagsContainer.innerHTML = ''; // 清空
+            
+            if (!tags || tags.length === 0) {
+                console.warn('没有标签数据');
+                return;
+            }
+
             const orbitRadius = 350;
 
             tags.forEach((tag, index) => {
                 const tagElement = document.createElement('div');
                 tagElement.className = 'tag-item';
                 
+                // 计算位置
                 const angle = (index / tags.length) * Math.PI * 2 - Math.PI / 2;
                 const x = 350 + Math.cos(angle) * orbitRadius;
                 const y = 350 + Math.sin(angle) * orbitRadius;
@@ -834,14 +850,16 @@
                 tagElement.style.left = x + 'px';
                 tagElement.style.top = y + 'px';
                 
+                // 设置内容
                 tagElement.innerHTML = `
                     <span class="tag-short">${tag.short}</span>
                     <span class="tag-full">${tag.full}</span>
                 `;
                 
+                // 添加到容器
                 tagsContainer.appendChild(tagElement);
 
-                // 添加悬停效果
+                // 悬停效果
                 tagElement.addEventListener('mouseenter', () => {
                     cursor.classList.add('hover');
                 });
@@ -849,6 +867,8 @@
                     cursor.classList.remove('hover');
                 });
             });
+
+            console.log(`✅ 已渲染 ${tags.length} 个标签`);
         }
 
         // ================= 鼠标视差效果 =================
@@ -860,49 +880,56 @@
                 const yNormal = (e.clientY / window.innerHeight) - 0.5;
                 
                 // 行星 3D 旋转
-                gsap.to(planet, {
-                    rotationY: xNormal * 30,
-                    rotationX: -yNormal * 30,
-                    duration: 1,
-                    ease: "power2.out"
-                });
+                if (typeof gsap !== 'undefined') {
+                    gsap.to(planet, {
+                        rotationY: xNormal * 30,
+                        rotationX: -yNormal * 30,
+                        duration: 1,
+                        ease: "power2.out"
+                    });
 
-                // 标题视差
-                gsap.to('.hero-title', {
-                    x: xNormal * 30,
-                    y: yNormal * 30,
-                    duration: 1,
-                    ease: "power2.out"
-                });
-                
-                gsap.to('.hero-subtitle', {
-                    x: xNormal * 20,
-                    y: yNormal * 20,
-                    duration: 1.2,
-                    ease: "power2.out"
-                });
-                
-                // 标签轨道视差
-                gsap.to('.tags-orbit', {
-                    x: xNormal * -15,
-                    y: yNormal * -15,
-                    duration: 1.5,
-                    ease: "power2.out"
-                });
+                    // 标题视差
+                    gsap.to('.hero-title', {
+                        x: xNormal * 30,
+                        y: yNormal * 30,
+                        duration: 1,
+                        ease: "power2.out"
+                    });
+                    
+                    gsap.to('.hero-subtitle', {
+                                                x: xNormal * 20,
+                        y: yNormal * 20,
+                        duration: 1.2,
+                        ease: "power2.out"
+                    });
+                    
+                    // 标签轨道视差
+                    gsap.to('.tags-orbit', {
+                        x: xNormal * -15,
+                        y: yNormal * -15,
+                        duration: 1.5,
+                        ease: "power2.out"
+                    });
 
-                // 星星视差
-                gsap.to('.star', {
-                    x: xNormal * 20,
-                    y: yNormal * 20,
-                    duration: 2,
-                    ease: "power1.out",
-                    stagger: 0.02
-                });
+                    // 星星视差
+                    gsap.to('.star', {
+                        x: xNormal * 20,
+                        y: yNormal * 20,
+                        duration: 2,
+                        ease: "power1.out",
+                        stagger: 0.02
+                    });
+                }
             });
         }
 
-                // ================= GSAP 入场动画 =================
+        // ================= GSAP 入场动画 - 修复版 =================
         function initAnimations() {
+            if (typeof gsap === 'undefined') {
+                console.warn('GSAP 未加载');
+                return;
+            }
+
             // 标题入场
             gsap.from('.hero-title', {
                 opacity: 0,
@@ -948,14 +975,20 @@
                 delay: 0.7
             });
             
-            // 标签入场
+            // 标签入场 - 修复：不要设置 opacity 为 0，只做位移动画
             gsap.from('.tag-item', {
-                opacity: 0,
                 scale: 0,
                 duration: 0.6,
                 stagger: 0.08,
                 ease: "back.out(1.7)",
-                delay: 1.2
+                delay: 1.2,
+                onComplete: () => {
+                    // 确保动画完成后标签可见
+                    document.querySelectorAll('.tag-item').forEach(tag => {
+                        tag.style.opacity = '1';
+                        tag.style.visibility = 'visible';
+                    });
+                }
             });
 
             // 星星入场
@@ -979,6 +1012,7 @@
     </script>
 </body>
 </html>
+
 
 
 
