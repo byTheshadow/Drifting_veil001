@@ -6,7 +6,7 @@ window.PROFILE_DATA = {
         line2: "创意作品集"            // 中文标题
     },
     
-    // 背景图 URL（用户可以替换为自己的图片）
+    // 背景图 URL（用户可以替换为自己的图片，留空则不显示）
     heroBackground: "assets/images/hero-background.jpg",
     
     // 环绕标签（可增删）
@@ -23,5 +23,6 @@ window.PROFILE_DATA = {
         { short: "游戏设计", full: "游戏美术与关卡设计" }
     ]
 };
+
 
 
