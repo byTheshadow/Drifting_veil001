@@ -1,5 +1,4 @@
-
-<!-- index.html - 完整版（包含开屏动画） -->
+<!-- index.html - 修复版 -->
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -302,25 +301,33 @@
 
         .orbit-path {
             position: absolute;
-            top: 50%;
-            left: 50%;
+            top: 0;
+            left: 0;
             width: 100%;
             height: 100%;
             border: 2px dashed rgba(165, 200, 237, 0.3);
             border-radius: 50%;
-            transform: translate(-50%, -50%);
             animation: rotate 80s linear infinite;
         }
 
         @keyframes rotate {
-            from { transform: translate(-50%, -50%) rotate(0deg); }
-            to { transform: translate(-50%, -50%) rotate(360deg); }
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .tags-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
         }
 
         .tag-item {
             position: absolute;
-            background: rgba(255, 255, 255, 0.9);
+            background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
             padding: 12px 24px;
             border-radius: 50px;
             font-size: 0.9rem;
@@ -332,12 +339,13 @@
             white-space: nowrap;
             border: 1px solid rgba(165, 200, 237, 0.3);
             pointer-events: auto;
+            transform-origin: center;
         }
 
         .tag-item:hover {
             background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
             color: white;
-            transform: scale(1.15);
+            transform: translate(-50%, -50%) scale(1.15) !important;
             box-shadow: 0 10px 30px rgba(165, 200, 237, 0.4);
             z-index: 100;
         }
@@ -510,7 +518,7 @@
         <section class="hero-section">
             <!-- 背景图 -->
             <div class="hero-background">
-                <img src="" alt="Background" id="heroBackgroundImg">
+                <img src="" alt="Background" id="heroBackgroundImg" style="display: none;">
             </div>
 
             <!-- 装饰圆圈 -->
@@ -522,7 +530,9 @@
             <!-- 环绕标签轨道 -->
             <div class="tags-orbit">
                 <div class="orbit-path"></div>
-                <div id="tagsContainer"></div>
+                <div class="tags-container" id="tagsContainer">
+                    <!-- Tags 将由 JS 生成 -->
+                </div>
             </div>
 
             <!-- 中心内容 -->
@@ -544,6 +554,29 @@
             <p>Created by @玉元一shadow | Powered by Drifting Veil Template</p>
         </footer>
     </div>
+
+    <!-- 数据文件（在脚本之前加载） -->
+    <script>
+        // 默认数据（内嵌在页面中，确保一定能加载）
+        window.PROFILE_DATA = {
+            welcome: {
+                line1: "CREATIVE PORTFOLIO",
+                line2: "创意作品集"
+            },
+            heroBackground: "",
+            tags: [
+                { short: "UI/UX", full: "专注用户体验与界面美学设计" },
+                { short: "插画", full: "手绘与数字插画创作" },
+                { short: "角色设计", full: "原创角色概念与视觉开发" },
+                { short: "动画", full: "2D/3D 动画制作与特效" },
+                { short: "品牌设计", full: "视觉识别系统与品牌策略" },
+                { short: "摄影", full: "商业摄影与艺术摄影" },
+                { short: "平面设计", full: "海报、包装与印刷品设计" },
+                { short: "网页开发", full: "前端开发与交互设计" }
+            ]
+        };
+    </script>
+    <script src="data/profile.js"></script>
 
     <script>
         // ================= 开屏动画逻辑 =================
@@ -569,54 +602,42 @@
 
         // ================= 主页面初始化 =================
         function initMainPage() {
-            // 默认数据（如果没有加载 profile.js）
-            const defaultData = {
-                welcome: {
-                    line1: "CREATIVE PORTFOLIO",
-                    line2: "创意作品集"
-                },
-                heroBackground: "",
-                tags: [
-                    { short: "UI/UX", full: "专注用户体验与界面美学设计" },
-                    { short: "插画", full: "手绘与数字插画创作" },
-                    { short: "角色设计", full: "原创角色概念与视觉开发" },
-                    { short: "动画", full: "2D/3D 动画制作与特效" },
-                    { short: "品牌设计", full: "视觉识别系统与品牌策略" },
-                    { short: "摄影", full: "商业摄影与艺术摄影" },
-                    { short: "平面设计", full: "海报、包装与印刷品设计" },
-                    { short: "网页开发", full: "前端开发与交互设计" }
-                ]
-            };
+            console.log('初始化主页面...');
+            console.log('PROFILE_DATA:', window.PROFILE_DATA);
 
-            // 从数据文件获取配置（如果存在）
-            const profileData = window.PROFILE_DATA || defaultData;
+            const profileData = window.PROFILE_DATA;
             
             // 设置标题
-            document.getElementById('heroTitle').textContent = profileData.welcome?.line1 || defaultData.welcome.line1;
-            document.getElementById('heroSubtitle').textContent = profileData.welcome?.line2 || defaultData.welcome.line2;
+            document.getElementById('heroTitle').textContent = profileData.welcome.line1;
+            document.getElementById('heroSubtitle').textContent = profileData.welcome.line2;
             
             // 设置背景图
             const bgImg = document.getElementById('heroBackgroundImg');
             if (profileData.heroBackground) {
                 bgImg.src = profileData.heroBackground;
+                bgImg.style.display = 'block';
             }
 
             // 生成环绕标签
-            const tags = profileData.tags || defaultData.tags;
+            const tags = profileData.tags;
             const tagsContainer = document.getElementById('tagsContainer');
             const orbitRadius = 350; // 轨道半径
+
+            console.log('生成标签，数量:', tags.length);
 
             tags.forEach((tag, index) => {
                 const tagElement = document.createElement('div');
                 tagElement.className = 'tag-item';
                 
-                const angle = (index / tags.length) * Math.PI * 2;
+                // 计算位置（圆形分布）
+                const angle = (index / tags.length) * Math.PI * 2 - Math.PI / 2; // 从顶部开始
                 const x = Math.cos(angle) * orbitRadius;
                 const y = Math.sin(angle) * orbitRadius;
                 
-                tagElement.style.left = `calc(50% + ${x}px)`;
-                tagElement.style.top = `calc(50% + ${y}px)`;
-                tagElement.style.transform = 'translate(-50%, -50%)';
+                // 设置位置（相对于容器中心）
+                tagElement.style.left = `50%`;
+                tagElement.style.top = `50%`;
+                tagElement.style.transform = `translate(calc(-50% + ${x}px), calc(-50% + ${y}px))`;
                 
                 tagElement.innerHTML = `
                     <span class="tag-short">${tag.short}</span>
@@ -624,7 +645,11 @@
                 `;
                 
                 tagsContainer.appendChild(tagElement);
+                
+                console.log(`标签 ${index + 1} 已创建:`, tag.short, `位置: (${x}, ${y})`);
             });
+
+            console.log('标签容器内容:', tagsContainer.innerHTML);
 
             // 鼠标视差效果
             document.addEventListener('mousemove', (e) => {
@@ -686,11 +711,10 @@
                 ease: "back.out(1.7)",
                 delay: 1.2
             });
+
+            console.log('主页面初始化完成');
         }
     </script>
-
-    <!-- 数据文件（可选，如果不存在会使用默认数据） -->
-    <script src="data/profile.js"></script>
 </body>
 </html>
 
