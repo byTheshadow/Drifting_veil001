@@ -1,0 +1,521 @@
+<!-- character-detail.html - 角色详情页 -->
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>角色详情 - Drifting Veil</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Noto+Serif+SC:wght@400;700&family=Inter:wght@300;400;500&family=Dancing+Script:wght@500&display=swap" rel="stylesheet">
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+    <style>
+        :root {
+            --primary-blue: #A5C8ED;
+            --secondary-blue: #D1E3F8;
+            --bg-blue: #F8FAFD;
+            --text-blue: #5A7A9A;
+            --text-light: #7A9AB5;
+            --white: #FFFFFF;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', 'Noto Serif SC', sans-serif;
+            background-color: var(--bg-blue);
+            color: var(--text-blue);
+            overflow-x: hidden;
+            background-image: radial-gradient(circle at 80% 20%, #ffffff 0%, #E8F4F8 100%);
+        }
+
+        /* 布局容器 */
+        .page-container {
+            display: flex;
+            min-height: 100vh;
+            width: 100%;
+        }
+
+        /* ================= 左侧：内容区 ================= */
+        .left-content {
+            width: 55%;
+            padding: 80px 100px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .back-btn {
+            font-size: 0.75rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 50px;
+            cursor: pointer;
+            opacity: 0.6;
+            transition: all 0.3s ease;
+            display: inline-block;
+            width: fit-content;
+            color: var(--text-blue);
+        }
+
+        .back-btn:hover { 
+            opacity: 1;
+            color: var(--primary-blue);
+            transform: translateX(-5px);
+        }
+
+        .character-name {
+            font-family: 'Playfair Display', serif;
+            font-size: 5rem;
+            line-height: 0.95;
+            margin-bottom: 30px;
+            font-weight: 700;
+            color: var(--text-blue);
+        }
+
+        .character-quote {
+            font-family: 'Noto Serif SC', serif;
+            font-style: italic;
+            font-size: 1.4rem;
+            color: var(--primary-blue);
+            margin-bottom: 40px;
+            border-left: 3px solid var(--primary-blue);
+            padding-left: 25px;
+            line-height: 1.6;
+        }
+
+        .character-description {
+            font-size: 1rem;
+            line-height: 1.9;
+            color: var(--text-light);
+            max-width: 520px;
+            text-align: justify;
+            margin-bottom: 40px;
+        }
+
+        /* 属性标签 */
+        .attributes {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .attribute-tag {
+            padding: 8px 20px;
+            background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
+            color: white;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+            font-weight: 500;
+            box-shadow: 0 5px 15px rgba(165, 200, 237, 0.3);
+        }
+
+        /* ================= 右侧：交互卡片区 ================= */
+        .right-notes {
+            width: 45%;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 80px 50px;
+        }
+
+        .character-board {
+            position: relative;
+            width: 340px;
+            height: 500px;
+            z-index: 2;
+            transform-style: preserve-3d;
+        }
+
+        /* 角色主图 */
+        .main-photo {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 8px;
+            box-shadow: 0 30px 60px rgba(90, 122, 154, 0.2);
+            transition: transform 0.1s ease-out;
+            border: 8px solid white;
+        }
+
+        /* 浮动标签 */
+        .floating-tag {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 8px 18px;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            letter-spacing: 1.5px;
+            font-weight: 500;
+            box-shadow: 0 8px 20px rgba(90, 122, 154, 0.15);
+            white-space: nowrap;
+            pointer-events: none;
+            backdrop-filter: blur(10px);
+            color: var(--text-blue);
+            border: 1px solid rgba(165, 200, 237, 0.3);
+        }
+
+        /* 手写笔记 */
+        .handwritten-note {
+            position: absolute;
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.5rem;
+            color: var(--primary-blue);
+            pointer-events: none;
+            text-shadow: 0 2px 10px rgba(165, 200, 237, 0.3);
+        }
+
+        /* SVG 装饰线条 */
+        .deco-svg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .deco-path {
+            fill: none;
+            stroke: var(--primary-blue);
+            stroke-width: 1.5;
+            stroke-dasharray: 5, 5;
+            opacity: 0.4;
+        }
+
+        /* 标签位置 */
+        .tag1 { top: -35px; left: 50%; transform: translateX(-50%); }
+        .tag2 { right: -90px; top: 120px; }
+        .tag3 { left: -110px; bottom: 180px; }
+        .tag4 { right: -70px; bottom: 100px; }
+        .note1 { 
+            bottom: -70px; 
+            left: 0; 
+            max-width: 320px; 
+            font-size: 1.3rem;
+            line-height: 1.4;
+        }
+
+        /* 响应式 */
+        @media (max-width: 1200px) {
+            .left-content {
+                padding: 60px 60px;
+            }
+            .character-name {
+                font-size: 4rem;
+            }
+        }
+
+        @media (max-width: 1024px) {
+            .page-container { 
+                flex-direction: column-reverse; 
+            }
+            .left-content, .right-notes { 
+                width: 100%; 
+                padding: 40px; 
+            }
+            .right-notes { 
+                min-height: 600px; 
+            }
+            .character-name { 
+                font-size: 3.5rem; 
+            }
+            .character-board {
+                width: 300px;
+                height: 440px;
+            }
+            /* 移动端隐藏部分浮动标签 */
+            .tag2, .tag3 {
+                display: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .left-content {
+                padding: 30px 20px;
+            }
+            .character-name {
+                font-size: 2.8rem;
+            }
+            .character-quote {
+                font-size: 1.1rem;
+            }
+            .character-description {
+                font-size: 0.95rem;
+            }
+        }
+
+        /* 加载动画 */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--bg-blue);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease;
+        }
+
+        .loading-text {
+            font-size: 1.2rem;
+            color: var(--primary-blue);
+            letter-spacing: 3px;
+        }
+    </style>
+</head>
+<body>
+    <!-- 加载遮罩 -->
+    <div class="loading-overlay" id="loading">
+        <div class="loading-text">LOADING...</div>
+    </div>
+
+    <div class="page-container">
+        <!-- 左侧：文本内容 -->
+        <div class="left-content">
+            <div class="back-btn" onclick="window.location.href='characters.html'">
+                ← 返回角色画廊
+            </div>
+            
+            <h1 class="character-name" id="charName">角色名称</h1>
+            
+            <div class="character-quote" id="charQuote">
+                "这里是角色的经典台词或座右铭"
+            </div>
+            
+            <div class="character-description" id="charDesc">
+                角色的详细描述将在这里显示。包括背景故事、性格特点、能力介绍等内容。
+            </div>
+
+            <div class="attributes" id="charAttributes">
+                <!-- 属性标签将由 JS 动态生成 -->
+            </div>
+        </div>
+
+        <!-- 右侧：交互卡片 -->
+        <div class="right-notes" id="scene">
+            
+            <svg class="deco-svg" viewBox="0 0 500 600">
+                <!-- 装饰线条 -->
+                <path class="deco-path" d="M250,50 Q300,80 350,110" id="path1" />
+                <path class="deco-path" d="M400,200 Q450,250 420,350" id="path2" />
+                <path class="deco-path" d="M120,300 Q80,320 50,380" id="path3" />
+            </svg>
+
+            <div class="character-board" id="card">
+                <!-- 角色大图 -->
+                <img src="" alt="Character" class="main-photo" id="charImage">
+                
+                <!-- 浮动标签 -->
+                <div class="floating-tag tag1" id="tag1">标签1</div>
+                <div class="floating-tag tag2" id="tag2">标签2</div>
+                <div class="floating-tag tag3" id="tag3">标签3</div>
+                <div class="floating-tag tag4" id="tag4">标签4</div>
+
+                <!-- 手写笔记 -->
+                <div class="handwritten-note note1" id="note1">
+                    A soul drifting in the blue dream...
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- 数据文件 -->
+    <script src="data/characters.js"></script>
+
+    <script>
+        // 获取 URL 参数中的角色 ID
+        const urlParams = new URLSearchParams(window.location.search);
+        const characterId = parseInt(urlParams.get('id'));
+
+        // 从数据文件中获取角色信息
+        const characters = window.CHARACTERS_DATA || [];
+        const character = characters.find(c => c.id === characterId);
+
+        // 如果找不到角色，返回列表页
+        if (!character) {
+            alert('角色不存在');
+            window.location.href = 'characters.html';
+        }
+
+        // 填充页面内容
+        document.getElementById('charName').textContent = character.name || '未知角色';
+        document.getElementById('charQuote').textContent = character.quote || '"..."';
+        document.getElementById('charDesc').textContent = character.description || '暂无描述';
+        document.getElementById('charImage').src = character.image || '';
+        document.getElementById('charImage').alt = character.name || 'Character';
+
+        // 填充浮动标签
+        const tags = character.tags || ['神秘', '优雅', '强大', '梦幻'];
+        document.getElementById('tag1').textContent = tags[0] || '';
+        document.getElementById('tag2').textContent = tags[1] || '';
+        document.getElementById('tag3').textContent = tags[2] || '';
+        document.getElementById('tag4').textContent = tags[3] || '';
+
+        // 填充手写笔记
+        document.getElementById('note1').textContent = character.note || 'A soul drifting in the blue dream...';
+
+        // 填充属性标签
+        const attributes = character.attributes || ['原创角色', '主角', '魔法系'];
+        const attributesContainer = document.getElementById('charAttributes');
+        attributes.forEach(attr => {
+            const tag = document.createElement('div');
+            tag.className = 'attribute-tag';
+            tag.textContent = attr;
+            attributesContainer.appendChild(tag);
+        });
+
+        // 页面加载完成后执行动画
+        window.addEventListener('load', () => {
+            // 隐藏加载遮罩
+            setTimeout(() => {
+                document.getElementById('loading').style.opacity = '0';
+                setTimeout(() => {
+                    document.getElementById('loading').style.display = 'none';
+                }, 500);
+            }, 300);
+
+            // 1. 文字入场动画
+            gsap.from(".character-name", { 
+                opacity: 0, 
+                x: -50, 
+                duration: 1, 
+                ease: "power3.out", 
+                delay: 0.3 
+            });
+            
+            gsap.from(".character-quote", { 
+                opacity: 0, 
+                x: -30, 
+                duration: 1, 
+                ease: "power3.out", 
+                delay: 0.6 
+            });
+            
+            gsap.from(".character-description", { 
+                opacity: 0, 
+                y: 20, 
+                duration: 1, 
+                ease: "power3.out", 
+                delay: 0.9 
+            });
+
+            gsap.from(".attribute-tag", { 
+                opacity: 0, 
+                scale: 0, 
+                duration: 0.6, 
+                stagger: 0.1, 
+                ease: "back.out(1.7)", 
+                delay: 1.2 
+            });
+
+            // 2. 右侧卡片和标签入场
+            gsap.from(".character-board", { 
+                opacity: 0, 
+                scale: 0.8, 
+                duration: 1, 
+                ease: "power3.out", 
+                delay: 0.5 
+            });
+
+            gsap.from(".floating-tag", { 
+                opacity: 0, 
+                scale: 0, 
+                duration: 0.8, 
+                stagger: 0.15, 
+                ease: "back.out(1.7)", 
+                delay: 1 
+            });
+
+            gsap.from(".handwritten-note", { 
+                opacity: 0, 
+                y: 20, 
+                duration: 1, 
+                ease: "power3.out", 
+                delay: 1.5 
+            });
+
+            // 3. SVG 线条生长动画
+            document.querySelectorAll('.deco-path').forEach(path => {
+                const length = path.getTotalLength();
+                gsap.set(path, { strokeDasharray: length, strokeDashoffset: length });
+                gsap.to(path, { 
+                    strokeDashoffset: 0, 
+                    duration: 1.5, 
+                    ease: "power2.inOut", 
+                    delay: 1.3 
+                });
+            });
+        });
+
+        // 4. 核心交互：3D 卡片跟随鼠标
+        const card = document.getElementById('card');
+        const scene = document.getElementById('scene');
+
+        scene.addEventListener('mousemove', (e) => {
+            const rect = scene.getBoundingClientRect();
+            const x = e.clientX - rect.left - rect.width / 2;
+            const y = e.clientY - rect.top - rect.height / 2;
+
+            // 卡片倾斜
+            gsap.to(card, {
+                rotationY: x * 0.04,
+                rotationX: -y * 0.04,
+                transformPerspective: 1200,
+                duration: 0.6,
+                ease: "power2.out"
+            });
+
+            // 标签视差效果
+            gsap.to(".floating-tag", {
+                x: (i) => x * (0.02 + i * 0.008),
+                y: (i) => y * (0.02 + i * 0.008),
+                duration: 0.8,
+                ease: "power2.out"
+            });
+
+            // 手写笔记微动
+            gsap.to(".handwritten-note", {
+                x: x * 0.03,
+                y: y * 0.03,
+                rotation: x * 0.015,
+                duration: 1,
+                ease: "power2.out"
+            });
+        });
+
+        // 鼠标离开恢复
+        scene.addEventListener('mouseleave', () => {
+            gsap.to(card, { 
+                rotationX: 0, 
+                rotationY: 0, 
+                duration: 1,
+                ease: "power2.out"
+            });
+            gsap.to(".floating-tag, .handwritten-note", { 
+                x: 0, 
+                y: 0, 
+                rotation: 0, 
+                duration: 1,
+                ease: "power2.out"
+            });
+        });
+    </script>
+</body>
+</html>
