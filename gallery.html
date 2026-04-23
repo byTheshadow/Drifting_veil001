@@ -10,7 +10,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Noto+Serif+SC:wght@400;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
 
     <style>
         :root {
@@ -78,6 +77,8 @@
             align-items: center;
             justify-content: space-between;
             padding: 0 60px;
+            opacity: 1 !important;
+            visibility: visible !important;
         }
 
         .logo {
@@ -86,12 +87,14 @@
             font-weight: 700;
             color: var(--text-blue);
             letter-spacing: 2px;
+            opacity: 1 !important;
         }
 
         .nav-links {
             display: flex;
             gap: 40px;
             list-style: none;
+            opacity: 1 !important;
         }
 
         .nav-links a {
@@ -102,6 +105,7 @@
             letter-spacing: 1px;
             transition: color 0.3s ease;
             position: relative;
+            opacity: 1 !important;
         }
 
         .nav-links a::after {
@@ -136,6 +140,8 @@
             color: var(--text-blue);
             margin-bottom: 15px;
             letter-spacing: 5px;
+            opacity: 1 !important;
+            visibility: visible !important;
         }
 
         .page-subtitle {
@@ -144,6 +150,7 @@
             color: var(--primary-blue);
             letter-spacing: 3px;
             opacity: 0.8;
+            visibility: visible !important;
         }
 
         /* ================= 过滤器 ================= */
@@ -166,6 +173,8 @@
             cursor: pointer;
             transition: all 0.4s ease;
             letter-spacing: 1px;
+            opacity: 1 !important;
+            visibility: visible !important;
         }
 
         .filter-btn:hover,
@@ -198,6 +207,8 @@
             background: white;
             box-shadow: 0 10px 30px rgba(90, 122, 154, 0.1);
             transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+            opacity: 1 !important;
+            visibility: visible !important;
         }
 
         .gallery-item:hover {
@@ -421,7 +432,7 @@
             <li><a href="index.html">首页</a></li>
             <li><a href="characters.html">角色</a></li>
             <li><a href="gallery.html">画廊</a></li>
-                        <li><a href="about.html">关于</a></li>
+            <li><a href="about.html">关于</a></li>
         </ul>
     </nav>
 
@@ -506,42 +517,28 @@
                 title: "梦境之蓝",
                 category: "illustration",
                 categoryName: "插画",
-                image: "assets/images/gallery/gallery-1.jpg"
+                image: "https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?w=400"
             },
             {
                 id: 2,
                 title: "角色概念",
                 category: "character",
                 categoryName: "角色设计",
-                image: "assets/images/gallery/gallery-2.jpg"
+                image: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=400"
             },
             {
                 id: 3,
                 title: "幻想世界",
                 category: "concept",
                 categoryName: "概念艺术",
-                image: "assets/images/gallery/gallery-3.jpg"
+                image: "https://images.unsplash.com/photo-1634017839464-5c339ebe3cb4?w=400"
             },
             {
                 id: 4,
                 title: "光影瞬间",
                 category: "photography",
                 categoryName: "摄影",
-                image: "assets/images/gallery/gallery-4.jpg"
-            },
-            {
-                id: 5,
-                title: "水彩梦境",
-                category: "illustration",
-                categoryName: "插画",
-                image: "assets/images/gallery/gallery-5.jpg"
-            },
-            {
-                id: 6,
-                title: "人物速写",
-                category: "character",
-                categoryName: "角色设计",
-                image: "assets/images/gallery/gallery-6.jpg"
+                image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400"
             }
         ];
 
@@ -553,9 +550,7 @@
         const lightboxCategory = document.getElementById('lightboxCategory');
         const lightboxClose = document.getElementById('lightboxClose');
 
-        let currentFilter = 'all';
-
-        // ================= 渲染画廊 =================
+        // ================= 渲染画廊 - 修复版 =================
         function renderGallery(filter = 'all') {
             galleryGrid.innerHTML = '';
             
@@ -591,18 +586,24 @@
                 
                 galleryGrid.appendChild(galleryItem);
 
-                // 入场动画
-                gsap.from(galleryItem, {
-                    opacity: 0,
-                    y: 50,
-                    duration: 0.6,
-                    delay: index * 0.1,
-                    ease: "power2.out"
-                });
+                // 入场动画 - 修复版：只用 y 和 scale
+                if (typeof gsap !== 'undefined') {
+                    gsap.from(galleryItem, {
+                        y: 50,
+                        scale: 0.9,
+                        duration: 0.6,
+                        delay: index * 0.1,
+                        ease: "power2.out",
+                        onComplete: () => {
+                            galleryItem.style.opacity = '1';
+                            galleryItem.style.visibility = 'visible';
+                        }
+                    });
+                }
             });
         }
 
-        // ================= 过滤功能 =================
+        // ================= 过滤功能 - 修复版 =================
         filterBtns.forEach(btn => {
             btn.addEventListener('click', () => {
                 const filter = btn.dataset.filter;
@@ -611,16 +612,20 @@
                 filterBtns.forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
                 
-                // 淡出动画
-                gsap.to('.gallery-item', {
-                    opacity: 0,
-                    y: 20,
-                    duration: 0.3,
-                    stagger: 0.05,
-                    onComplete: () => {
-                        renderGallery(filter);
-                    }
-                });
+                // 淡出动画 - 只用 y 和 scale
+                if (typeof gsap !== 'undefined') {
+                    gsap.to('.gallery-item', {
+                        y: 20,
+                        scale: 0.9,
+                        duration: 0.3,
+                        stagger: 0.05,
+                        onComplete: () => {
+                            renderGallery(filter);
+                        }
+                    });
+                } else {
+                    renderGallery(filter);
+                }
             });
         });
 
@@ -656,30 +661,47 @@
         // ================= 初始化 =================
         renderGallery();
 
-        // 入场动画
-        gsap.from('.page-title', {
-            opacity: 0,
-            y: -30,
-            duration: 1,
-            ease: "power3.out"
-        });
+        // 强制确保元素可见
+        setTimeout(() => {
+            document.querySelectorAll('.page-title, .page-subtitle, .filter-btn, .gallery-item').forEach(el => {
+                el.style.opacity = '1';
+                el.style.visibility = 'visible';
+            });
+        }, 100);
 
-        gsap.from('.page-subtitle', {
-            opacity: 0,
-            y: -20,
-            duration: 1,
-            delay: 0.2,
-            ease: "power3.out"
-        });
+        // 入场动画 - 修复版：只用 y 和 scale
+        if (typeof gsap !== 'undefined') {
+            gsap.from('.page-title', {
+                y: -30,
+                scale: 0.9,
+                duration: 1,
+                ease: "power3.out"
+            });
 
-        gsap.from('.filter-btn', {
-            opacity: 0,
-            y: -20,
-            duration: 0.6,
-            stagger: 0.1,
-            delay: 0.4,
-            ease: "power2.out"
-        });
+            gsap.from('.page-subtitle', {
+                y: -20,
+                scale: 0.9,
+                duration: 1,
+                delay: 0.2,
+                ease: "power3.out"
+            });
+
+            gsap.from('.filter-btn', {
+                y: -20,
+                scale: 0.8,
+                duration: 0.6,
+                stagger: 0.1,
+                delay: 0.4,
+                ease: "power2.out",
+                onComplete: () => {
+                    document.querySelectorAll('.filter-btn').forEach(btn => {
+                        btn.style.opacity = '1';
+                        btn.style.visibility = 'visible';
+                    });
+                }
+            });
+        }
     </script>
 </body>
 </html>
+
