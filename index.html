@@ -32,6 +32,35 @@
             background: linear-gradient(135deg, #F8FAFD 0%, #E8F4F8 100%);
             color: var(--text-blue);
             overflow-x: hidden;
+            cursor: none;
+        }
+
+        /* ================= 自定义光标 ================= */
+        .custom-cursor {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--primary-blue);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 10000;
+            transition: transform 0.15s ease;
+            mix-blend-mode: difference;
+        }
+
+        .cursor-dot {
+            position: fixed;
+            width: 6px;
+            height: 6px;
+            background: var(--primary-blue);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 10001;
+        }
+
+        .custom-cursor.hover {
+            transform: scale(2);
+            background: rgba(165, 200, 237, 0.1);
         }
 
         /* ================= 开屏动画样式 ================= */
@@ -228,8 +257,8 @@
             filter: blur(2px);
         }
 
-        /* 装饰背景 */
-        .deco-background {
+        /* 漂浮星星 */
+        .stars-container {
             position: absolute;
             top: 0;
             left: 0;
@@ -239,54 +268,139 @@
             pointer-events: none;
         }
 
-        .deco-circle {
+        .star {
             position: absolute;
+            width: 4px;
+            height: 4px;
+            background: var(--primary-blue);
             border-radius: 50%;
-            border: 1px solid rgba(165, 200, 237, 0.2);
+            box-shadow: 0 0 10px var(--primary-blue);
+            animation: twinkle 3s ease-in-out infinite;
         }
 
-        .circle-1 {
-            width: 400px;
-            height: 400px;
-            top: 10%;
-            left: 5%;
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.5); }
         }
 
-        .circle-2 {
-            width: 300px;
-            height: 300px;
-            bottom: 15%;
-            right: 10%;
+        /* 中心圆球（行星） */
+        .center-planet {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 280px;
+            height: 280px;
+            margin-left: -140px;
+            margin-top: -140px;
+            z-index: 5;
+            transform-style: preserve-3d;
+            perspective: 1000px;
         }
 
-        /* 中心内容 */
-        .hero-content {
+        .planet-sphere {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, #E8F4F8, #A5C8ED 60%, #7A9AB5);
+            box-shadow: 
+                inset -20px -20px 50px rgba(90, 122, 154, 0.3),
+                inset 20px 20px 50px rgba(255, 255, 255, 0.5),
+                0 0 80px rgba(165, 200, 237, 0.4),
+                0 0 120px rgba(165, 200, 237, 0.2);
             position: relative;
-            z-index: 10;
-            text-align: center;
-            max-width: 900px;
-            padding: 0 40px;
+            overflow: hidden;
+            animation: planetRotate 20s linear infinite;
         }
 
-        .hero-title {
-            font-family: 'Playfair Display', serif;
-            font-size: 5rem;
-            font-weight: 700;
-            color: var(--text-blue);
-            margin-bottom: 20px;
-            letter-spacing: 5px;
-            line-height: 1.1;
+        @keyframes planetRotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
         }
 
-        .hero-subtitle {
-            font-family: 'Noto Serif SC', serif;
-            font-size: 2rem;
-            color: var(--primary-blue);
-            margin-bottom: 60px;
-            font-weight: 400;
+        .planet-sphere::before {
+            content: '';
+            position: absolute;
+            top: 10%;
+            left: 10%;
+            width: 40%;
+            height: 40%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.6), transparent);
+            border-radius: 50%;
+            filter: blur(20px);
         }
 
-        /* 环绕标签系统 - 修复版 */
+        .planet-sphere::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 50%;
+            background: linear-gradient(to top, rgba(90, 122, 154, 0.3), transparent);
+            border-radius: 50%;
+        }
+
+        /* 行星环系统 */
+        .orbit-system {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            z-index: 4;
+            pointer-events: none;
+        }
+
+        .orbit-ring {
+            position: absolute;
+            border: 2px solid rgba(165, 200, 237, 0.3);
+            border-radius: 50%;
+            transform-style: preserve-3d;
+        }
+
+        .orbit-ring-1 {
+            width: 500px;
+            height: 500px;
+            margin-left: -250px;
+            margin-top: -250px;
+            animation: orbitRotate1 40s linear infinite;
+            border-style: dashed;
+        }
+
+        .orbit-ring-2 {
+            width: 700px;
+            height: 700px;
+            margin-left: -350px;
+            margin-top: -350px;
+            animation: orbitRotate2 60s linear infinite reverse;
+            border-style: solid;
+            opacity: 0.5;
+        }
+
+        .orbit-ring-3 {
+            width: 900px;
+            height: 900px;
+            margin-left: -450px;
+            margin-top: -450px;
+            animation: orbitRotate3 80s linear infinite;
+            border-style: dotted;
+            opacity: 0.3;
+        }
+
+        @keyframes orbitRotate1 {
+            from { transform: rotate(0deg) rotateX(60deg); }
+            to { transform: rotate(360deg) rotateX(60deg); }
+        }
+
+        @keyframes orbitRotate2 {
+            from { transform: rotate(0deg) rotateX(65deg); }
+            to { transform: rotate(360deg) rotateX(65deg); }
+        }
+
+        @keyframes orbitRotate3 {
+            from { transform: rotate(0deg) rotateX(70deg); }
+            to { transform: rotate(360deg) rotateX(70deg); }
+        }
+
+        /* 环绕标签系统 */
         .tags-orbit {
             position: absolute;
             top: 50%;
@@ -295,24 +409,8 @@
             height: 700px;
             margin-left: -350px;
             margin-top: -350px;
-            z-index: 5;
+            z-index: 6;
             pointer-events: none;
-        }
-
-        .orbit-path {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            border: 2px dashed rgba(165, 200, 237, 0.3);
-            border-radius: 50%;
-            animation: rotate 80s linear infinite;
-        }
-
-        @keyframes rotate {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
         }
 
         .tags-container {
@@ -332,7 +430,7 @@
             font-weight: 500;
             color: var(--text-blue);
             cursor: pointer;
-            transition: all 0.4s ease;
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
             box-shadow: 0 5px 20px rgba(165, 200, 237, 0.2);
             white-space: nowrap;
             border: 1px solid rgba(165, 200, 237, 0.3);
@@ -343,8 +441,8 @@
         .tag-item:hover {
             background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
             color: white;
-            transform: translate(-50%, -50%) scale(1.15);
-            box-shadow: 0 10px 30px rgba(165, 200, 237, 0.4);
+            transform: translate(-50%, -50%) scale(1.2) translateY(-5px);
+            box-shadow: 0 15px 40px rgba(165, 200, 237, 0.5);
             z-index: 100;
         }
 
@@ -367,6 +465,35 @@
             overflow: hidden;
             transition: all 0.4s ease;
             margin-top: 0;
+            font-weight: 400;
+        }
+
+        /* 标题区域 */
+        .hero-content {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            max-width: 900px;
+            padding: 0 40px;
+            margin-top: -100px;
+        }
+
+        .hero-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 5rem;
+            font-weight: 700;
+            color: var(--text-blue);
+            margin-bottom: 20px;
+            letter-spacing: 5px;
+            line-height: 1.1;
+            text-shadow: 0 2px 20px rgba(165, 200, 237, 0.3);
+        }
+
+        .hero-subtitle {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 2rem;
+            color: var(--primary-blue);
+            margin-bottom: 60px;
             font-weight: 400;
         }
 
@@ -450,6 +577,14 @@
 
         /* 移动端适配 */
         @media (max-width: 768px) {
+            body {
+                cursor: auto;
+            }
+
+            .custom-cursor, .cursor-dot {
+                display: none;
+            }
+
             .navbar {
                 padding: 0 20px;
             }
@@ -467,11 +602,36 @@
                 font-size: 1.5rem;
             }
 
+            .center-planet {
+                width: 200px;
+                height: 200px;
+                margin-left: -100px;
+                margin-top: -100px;
+            }
+
             .tags-orbit {
                 width: 500px;
                 height: 500px;
                 margin-left: -250px;
                 margin-top: -250px;
+            }
+
+            .orbit-ring-1 {
+                width: 350px;
+                height: 350px;
+                margin-left: -175px;
+                margin-top: -175px;
+            }
+
+            .orbit-ring-2 {
+                width: 500px;
+                height: 500px;
+                margin-left: -250px;
+                margin-top: -250px;
+            }
+
+            .orbit-ring-3 {
+                display: none;
             }
 
             .tag-item {
@@ -482,6 +642,10 @@
     </style>
 </head>
 <body>
+    <!-- 自定义光标 -->
+    <div class="custom-cursor"></div>
+    <div class="cursor-dot"></div>
+
     <!-- ================= 开屏动画 ================= -->
     <div class="splash-wrapper" id="splashWrapper">
         <div class="folder-icon">
@@ -506,32 +670,45 @@
             <ul class="nav-links">
                 <li><a href="index.html">首页</a></li>
                 <li><a href="characters.html">角色</a></li>
-                <li><a href="#gallery">画廊</a></li>
-                <li><a href="#about">关于</a></li>
+                <li><a href="gallery.html">画廊</a></li>
+                <li><a href="about.html">关于</a></li>
             </ul>
         </nav>
 
         <section class="hero-section">
+            <!-- 背景图 -->
             <div class="hero-background">
                 <img src="" alt="Background" id="heroBackgroundImg" style="display: none;">
             </div>
 
-            <div class="deco-background">
-                <div class="deco-circle circle-1"></div>
-                <div class="deco-circle circle-2"></div>
+            <!-- 漂浮星星 -->
+            <div class="stars-container" id="starsContainer"></div>
+
+            <!-- 中心行星 -->
+            <div class="center-planet" id="centerPlanet">
+                <div class="planet-sphere"></div>
             </div>
 
+            <!-- 行星环 -->
+            <div class="orbit-system">
+                <div class="orbit-ring orbit-ring-1"></div>
+                <div class="orbit-ring orbit-ring-2"></div>
+                <div class="orbit-ring orbit-ring-3"></div>
+            </div>
+
+            <!-- 环绕标签 -->
             <div class="tags-orbit">
-                <div class="orbit-path"></div>
                 <div class="tags-container" id="tagsContainer"></div>
             </div>
 
+            <!-- 标题内容 -->
             <div class="hero-content">
                 <h1 class="hero-title" id="heroTitle">CREATIVE PORTFOLIO</h1>
                 <h2 class="hero-subtitle" id="heroSubtitle">创意作品集</h2>
                 <a href="characters.html" class="cta-button">探索角色</a>
             </div>
 
+            <!-- 滚动提示 -->
             <div class="scroll-hint">
                 <div class="scroll-hint-text">SCROLL TO EXPLORE</div>
                 <div class="scroll-arrow"></div>
@@ -543,28 +720,45 @@
         </footer>
     </div>
 
-    <script>
-        window.PROFILE_DATA = {
-            welcome: {
-                line1: "CREATIVE PORTFOLIO",
-                line2: "创意作品集"
-            },
-            heroBackground: "",
-            tags: [
-                { short: "UI/UX", full: "专注用户体验与界面美学设计" },
-                { short: "插画", full: "手绘与数字插画创作" },
-                { short: "角色设计", full: "原创角色概念与视觉开发" },
-                { short: "动画", full: "2D/3D 动画制作与特效" },
-                { short: "品牌设计", full: "视觉识别系统与品牌策略" },
-                { short: "摄影", full: "商业摄影与艺术摄影" },
-                { short: "平面设计", full: "海报、包装与印刷品设计" },
-                { short: "网页开发", full: "前端开发与交互设计" }
-            ]
-        };
-    </script>
+    <!-- 数据文件 -->
     <script src="data/profile.js"></script>
 
     <script>
+        // ================= 自定义光标 =================
+        const cursor = document.querySelector('.custom-cursor');
+        const cursorDot = document.querySelector('.cursor-dot');
+        
+        let mouseX = 0, mouseY = 0;
+        let cursorX = 0, cursorY = 0;
+        let dotX = 0, dotY = 0;
+
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+        });
+
+        function animateCursor() {
+            // 光标圈跟随（带延迟）
+            cursorX += (mouseX - cursorX) * 0.15;
+            cursorY += (mouseY - cursorY) * 0.15;
+            cursor.style.transform = `translate(${cursorX - 10}px, ${cursorY - 10}px)`;
+
+            // 光标点跟随（更快）
+            dotX += (mouseX - dotX) * 0.25;
+            dotY += (mouseY - dotY) * 0.25;
+            cursorDot.style.transform = `translate(${dotX - 3}px, ${dotY - 3}px)`;
+
+            requestAnimationFrame(animateCursor);
+        }
+        animateCursor();
+
+        // 悬停效果
+        document.querySelectorAll('a, .tag-item, .cta-button').forEach(el => {
+            el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+            el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+        });
+
+        // ================= 开屏动画 =================
         const splashWrapper = document.getElementById('splashWrapper');
         const mainPage = document.getElementById('mainPage');
 
@@ -576,19 +770,56 @@
             initMainPage();
         }, 3700);
 
+        // ================= 主页面初始化 =================
         function initMainPage() {
-            const profileData = window.PROFILE_DATA;
+            const profileData = window.PROFILE_DATA || {
+                welcome: { line1: "CREATIVE PORTFOLIO", line2: "创意作品集" },
+                heroBackground: "",
+                tags: []
+            };
             
+            // 设置标题
             document.getElementById('heroTitle').textContent = profileData.welcome.line1;
             document.getElementById('heroSubtitle').textContent = profileData.welcome.line2;
             
+            // 设置背景图
             const bgImg = document.getElementById('heroBackgroundImg');
             if (profileData.heroBackground) {
                 bgImg.src = profileData.heroBackground;
                 bgImg.style.display = 'block';
             }
 
-            const tags = profileData.tags;
+            // 生成星星
+            createStars();
+
+            // 渲染标签
+            renderTags(profileData.tags);
+
+            // 鼠标视差效果
+            initParallax();
+
+            // GSAP 入场动画
+            initAnimations();
+        }
+
+        // ================= 生成星星 =================
+        function createStars() {
+            const container = document.getElementById('starsContainer');
+            const starCount = 30;
+
+            for (let i = 0; i < starCount; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.animationDelay = Math.random() * 3 + 's';
+                star.style.animationDuration = (2 + Math.random() * 3) + 's';
+                container.appendChild(star);
+            }
+        }
+
+        // ================= 渲染标签 =================
+        function renderTags(tags) {
             const tagsContainer = document.getElementById('tagsContainer');
             const orbitRadius = 350;
 
@@ -609,12 +840,34 @@
                 `;
                 
                 tagsContainer.appendChild(tagElement);
-            });
 
+                // 添加悬停效果
+                tagElement.addEventListener('mouseenter', () => {
+                    cursor.classList.add('hover');
+                });
+                tagElement.addEventListener('mouseleave', () => {
+                    cursor.classList.remove('hover');
+                });
+            });
+        }
+
+        // ================= 鼠标视差效果 =================
+        function initParallax() {
+            const planet = document.getElementById('centerPlanet');
+            
             document.addEventListener('mousemove', (e) => {
                 const xNormal = (e.clientX / window.innerWidth) - 0.5;
                 const yNormal = (e.clientY / window.innerHeight) - 0.5;
                 
+                // 行星 3D 旋转
+                gsap.to(planet, {
+                    rotationY: xNormal * 30,
+                    rotationX: -yNormal * 30,
+                    duration: 1,
+                    ease: "power2.out"
+                });
+
+                // 标题视差
                 gsap.to('.hero-title', {
                     x: xNormal * 30,
                     y: yNormal * 30,
@@ -629,14 +882,28 @@
                     ease: "power2.out"
                 });
                 
+                // 标签轨道视差
                 gsap.to('.tags-orbit', {
                     x: xNormal * -15,
                     y: yNormal * -15,
                     duration: 1.5,
                     ease: "power2.out"
                 });
-            });
 
+                // 星星视差
+                gsap.to('.star', {
+                    x: xNormal * 20,
+                    y: yNormal * 20,
+                    duration: 2,
+                    ease: "power1.out",
+                    stagger: 0.02
+                });
+            });
+        }
+
+                // ================= GSAP 入场动画 =================
+        function initAnimations() {
+            // 标题入场
             gsap.from('.hero-title', {
                 opacity: 0,
                 y: -50,
@@ -653,6 +920,7 @@
                 delay: 0.6
             });
             
+            // 按钮入场
             gsap.from('.cta-button', {
                 opacity: 0,
                 scale: 0.8,
@@ -661,13 +929,51 @@
                 delay: 0.9
             });
             
+            // 行星入场
+            gsap.from('.center-planet', {
+                opacity: 0,
+                scale: 0.5,
+                duration: 1.5,
+                ease: "elastic.out(1, 0.5)",
+                delay: 0.4
+            });
+
+            // 行星环入场
+            gsap.from('.orbit-ring', {
+                opacity: 0,
+                scale: 0.8,
+                duration: 1.2,
+                stagger: 0.2,
+                ease: "power2.out",
+                delay: 0.7
+            });
+            
+            // 标签入场
             gsap.from('.tag-item', {
                 opacity: 0,
                 scale: 0,
                 duration: 0.6,
-                stagger: 0.1,
+                stagger: 0.08,
                 ease: "back.out(1.7)",
                 delay: 1.2
+            });
+
+            // 星星入场
+            gsap.from('.star', {
+                opacity: 0,
+                scale: 0,
+                duration: 1,
+                stagger: 0.05,
+                ease: "power2.out",
+                delay: 1
+            });
+
+            // 滚动提示
+            gsap.from('.scroll-hint', {
+                opacity: 0,
+                y: -20,
+                duration: 1,
+                delay: 1.8
             });
         }
     </script>
