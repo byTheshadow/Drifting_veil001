@@ -1,0 +1,424 @@
+<!-- characters.html - 角色卡展示页面 -->
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>角色展示 - Drifting Veil</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Noto+Serif+SC:wght@400;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/Draggable.min.js"></script>
+
+    <style>
+        :root {
+            --primary-blue: #A5C8ED;
+            --secondary-blue: #D1E3F8;
+            --bg-blue: #F8FAFD;
+            --text-blue: #5A7A9A;
+            --card-width: 240px;
+            --card-height: 360px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            user-select: none;
+        }
+
+        body {
+            height: 100vh;
+            width: 100vw;
+            background: radial-gradient(circle at 50% 50%, #ffffff 0%, #E8F4F8 100%);
+            overflow: hidden;
+            font-family: 'Inter', 'Noto Serif SC', sans-serif;
+            color: var(--text-blue);
+        }
+
+        /* 顶部导航 */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 70px;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(165, 200, 237, 0.2);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 60px;
+        }
+
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-blue);
+            letter-spacing: 2px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 40px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-blue);
+            font-size: 0.95rem;
+            font-weight: 400;
+            letter-spacing: 1px;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary-blue);
+        }
+
+        /* 页面标题 */
+        .page-title {
+            position: fixed;
+            top: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 100;
+            text-align: center;
+        }
+
+        .title-main {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            letter-spacing: 5px;
+            font-style: italic;
+            color: var(--text-blue);
+            margin-bottom: 8px;
+        }
+
+        .title-sub {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 0.9rem;
+            letter-spacing: 3px;
+            opacity: 0.6;
+            color: var(--primary-blue);
+        }
+
+        /* 3D 舞台 */
+        .viewport {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            perspective: 2000px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .world {
+            position: relative;
+            width: var(--card-width);
+            height: var(--card-height);
+            transform-style: preserve-3d;
+        }
+
+        /* 角色卡片 */
+        .card {
+            position: absolute;
+            width: var(--card-width);
+            height: var(--card-height);
+            background: white;
+            padding: 12px;
+            box-shadow: 0 15px 40px rgba(90, 122, 154, 0.15);
+            border-radius: 8px;
+            cursor: pointer;
+            overflow: hidden;
+            transition: all 0.5s ease;
+            border: 1px solid rgba(165, 200, 237, 0.3);
+        }
+
+        .card-inner {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            overflow: hidden;
+            border-radius: 4px;
+        }
+
+        .card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: brightness(1.05) saturate(1.1);
+            transition: all 0.5s ease;
+        }
+
+        /* 卡片信息层 */
+        .card-info {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 20px 15px;
+            background: linear-gradient(to top, rgba(165, 200, 237, 0.95) 0%, transparent 100%);
+            transform: translateY(100%);
+            transition: transform 0.4s ease;
+        }
+
+        .card-name {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 5px;
+        }
+
+        .card-category {
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.9);
+            letter-spacing: 1px;
+        }
+
+        /* 悬停效果 */
+        .card:hover {
+            box-shadow: 0 20px 50px rgba(90, 122, 154, 0.25);
+        }
+
+        .card:hover img {
+            filter: brightness(1.15) saturate(1.2);
+            transform: scale(1.08);
+        }
+
+        .card:hover .card-info {
+            transform: translateY(0);
+        }
+
+        /* 底部提示 */
+        footer {
+            position: fixed;
+            bottom: 40px;
+            width: 100%;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 0 100px;
+            z-index: 100;
+        }
+
+        .info-text {
+            font-size: 0.75rem;
+            letter-spacing: 2px;
+            opacity: 0.5;
+            color: var(--text-blue);
+        }
+
+        .scroll-indicator {
+            width: 1px;
+            height: 40px;
+            background: linear-gradient(to bottom, var(--primary-blue), transparent);
+        }
+
+        /* 加载动画 */
+        .loading {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 1rem;
+            color: var(--primary-blue);
+            letter-spacing: 2px;
+            z-index: 50;
+        }
+
+        /* 移动端适配 */
+        @media (max-width: 768px) {
+            :root {
+                --card-width: 180px;
+                --card-height: 270px;
+            }
+
+            header {
+                padding: 0 20px;
+            }
+
+            .nav-links {
+                gap: 20px;
+                font-size: 0.85rem;
+            }
+
+            .page-title {
+                top: 80px;
+            }
+
+            .title-main {
+                font-size: 1.8rem;
+            }
+
+            footer {
+                padding: 0 20px;
+            }
+
+            .info-text {
+                font-size: 0.65rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <header>
+        <div class="logo">DRIFTING VEIL</div>
+        <ul class="nav-links">
+            <li><a href="index.html">首页</a></li>
+            <li><a href="characters.html">角色</a></li>
+            <li><a href="#gallery">画廊</a></li>
+            <li><a href="#about">关于</a></li>
+        </ul>
+    </header>
+
+    <!-- 页面标题 -->
+    <div class="page-title">
+        <div class="title-main">CHARACTER GALLERY</div>
+        <div class="title-sub">角色画廊 · 梦幻收藏</div>
+    </div>
+
+    <!-- 加载提示 -->
+    <div class="loading" id="loading">LOADING...</div>
+
+    <!-- 3D 旋转舞台 -->
+    <div class="viewport">
+        <div class="world" id="world">
+            <!-- 卡片由 JS 动态生成 -->
+        </div>
+    </div>
+
+    <!-- 底部提示 -->
+    <footer>
+        <div class="info-text">DRAG TO ROTATE</div>
+        <div class="scroll-indicator"></div>
+        <div class="info-text">CLICK TO VIEW DETAILS</div>
+    </footer>
+
+    <!-- 数据文件 -->
+    <script src="data/characters.js"></script>
+
+    <script>
+        const world = document.getElementById('world');
+        const loading = document.getElementById('loading');
+        
+        // 从数据文件获取角色信息
+        const characters = window.CHARACTERS_DATA || [];
+        const cardCount = characters.length;
+        const radius = 650; // 旋转半径
+
+        // 初始化卡片
+        function initCards() {
+            if (cardCount === 0) {
+                loading.textContent = '暂无角色数据';
+                return;
+            }
+
+            characters.forEach((char, i) => {
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.dataset.id = char.id;
+                
+                const cardInner = document.createElement('div');
+                cardInner.className = 'card-inner';
+                
+                const img = document.createElement('img');
+                img.src = char.image;
+                img.alt = char.name;
+                
+                const cardInfo = document.createElement('div');
+                cardInfo.className = 'card-info';
+                cardInfo.innerHTML = `
+                    <div class="card-name">${char.name}</div>
+                    <div class="card-category">${char.category || '原创角色'}</div>
+                `;
+                
+                cardInner.appendChild(img);
+                cardInner.appendChild(cardInfo);
+                card.appendChild(cardInner);
+                
+                // 环形分布计算
+                const angle = (i / cardCount) * Math.PI * 2;
+                gsap.set(card, {
+                    x: Math.sin(angle) * radius,
+                    z: Math.cos(angle) * radius,
+                    rotationY: (i / cardCount) * 360
+                });
+                
+                // 点击跳转到详情页
+                card.addEventListener('click', () => {
+                    window.location.href = `character-detail.html?id=${char.id}`;
+                });
+                
+                world.appendChild(card);
+            });
+
+            // 隐藏加载提示
+            setTimeout(() => {
+                loading.style.opacity = '0';
+                setTimeout(() => loading.style.display = 'none', 300);
+            }, 500);
+        }
+
+        // 旋转逻辑
+        let rotationY = 0;
+        
+        // 拖拽旋转（带惯性）
+        const dragProxy = document.createElement("div");
+        Draggable.create(dragProxy, {
+            type: "x",
+            trigger: "body",
+            inertia: true,
+            onDrag: function() {
+                rotationY = this.x * 0.15;
+                gsap.to(world, { rotationY: rotationY, duration: 0.5 });
+            },
+            onThrowUpdate: function() {
+                rotationY = this.x * 0.15;
+                gsap.to(world, { rotationY: rotationY, duration: 0.5 });
+            }
+        });
+
+        // 滚轮旋转
+        window.addEventListener('wheel', (e) => {
+            rotationY -= e.deltaY * 0.1;
+            gsap.to(world, { rotationY: rotationY, duration: 1.2, ease: "power2.out" });
+        });
+
+        // 鼠标跟随的轻微倾斜效果
+        document.addEventListener('mousemove', (e) => {
+            const xNormal = (e.clientX / window.innerWidth) - 0.5;
+            const yNormal = (e.clientY / window.innerHeight) - 0.5;
+            
+            gsap.to(world, {
+                rotationX: -yNormal * 12,
+                x: xNormal * 40,
+                duration: 2,
+                ease: "power1.out"
+            });
+        });
+
+        // 自动缓慢旋转
+        gsap.to(world, {
+            rotationY: "+=360",
+            duration: 120,
+            repeat: -1,
+            ease: "none"
+        });
+
+        // 页面加载完成后初始化
+        window.addEventListener('load', initCards);
+    </script>
+</body>
+</html>
