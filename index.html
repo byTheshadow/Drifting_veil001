@@ -1,4 +1,3 @@
-<!-- index.html - 修复版 -->
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -287,14 +286,15 @@
             font-weight: 400;
         }
 
-        /* 环绕标签系统 */
+        /* 环绕标签系统 - 修复版 */
         .tags-orbit {
             position: absolute;
             top: 50%;
             left: 50%;
-            transform: translate(-50%, -50%);
             width: 700px;
             height: 700px;
+            margin-left: -350px;
+            margin-top: -350px;
             z-index: 5;
             pointer-events: none;
         }
@@ -316,9 +316,7 @@
         }
 
         .tags-container {
-            position: absolute;
-            top: 0;
-            left: 0;
+            position: relative;
             width: 100%;
             height: 100%;
         }
@@ -339,13 +337,13 @@
             white-space: nowrap;
             border: 1px solid rgba(165, 200, 237, 0.3);
             pointer-events: auto;
-            transform-origin: center;
+            transform: translate(-50%, -50%);
         }
 
         .tag-item:hover {
             background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
             color: white;
-            transform: translate(-50%, -50%) scale(1.15) !important;
+            transform: translate(-50%, -50%) scale(1.15);
             box-shadow: 0 10px 30px rgba(165, 200, 237, 0.4);
             z-index: 100;
         }
@@ -472,6 +470,8 @@
             .tags-orbit {
                 width: 500px;
                 height: 500px;
+                margin-left: -250px;
+                margin-top: -250px;
             }
 
             .tag-item {
@@ -484,7 +484,6 @@
 <body>
     <!-- ================= 开屏动画 ================= -->
     <div class="splash-wrapper" id="splashWrapper">
-        <!-- 文件夹图标 -->
         <div class="folder-icon">
             <svg width="120" height="120" viewBox="0 0 120 120" fill="none">
                 <path d="M20 30C20 25.5817 23.5817 22 28 22H48L56 30H92C96.4183 30 100 33.5817 100 38V90C100 94.4183 96.4183 98 92 98H28C23.5817 98 20 94.4183 20 90V30Z" 
@@ -492,7 +491,6 @@
             </svg>
         </div>
         
-        <!-- 鼠标指针 -->
         <div class="cursor-pointer">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
                 <path d="M3 3L10.07 19.97L12.58 12.58L19.97 10.07L3 3Z" 
@@ -503,7 +501,6 @@
 
     <!-- ================= 主页面 ================= -->
     <div class="main-page" id="mainPage">
-        <!-- 导航栏 -->
         <nav class="navbar">
             <div class="logo">DRIFTING VEIL</div>
             <ul class="nav-links">
@@ -514,50 +511,39 @@
             </ul>
         </nav>
 
-        <!-- 主英雄区 -->
         <section class="hero-section">
-            <!-- 背景图 -->
             <div class="hero-background">
                 <img src="" alt="Background" id="heroBackgroundImg" style="display: none;">
             </div>
 
-            <!-- 装饰圆圈 -->
             <div class="deco-background">
                 <div class="deco-circle circle-1"></div>
                 <div class="deco-circle circle-2"></div>
             </div>
 
-            <!-- 环绕标签轨道 -->
             <div class="tags-orbit">
                 <div class="orbit-path"></div>
-                <div class="tags-container" id="tagsContainer">
-                    <!-- Tags 将由 JS 生成 -->
-                </div>
+                <div class="tags-container" id="tagsContainer"></div>
             </div>
 
-            <!-- 中心内容 -->
             <div class="hero-content">
                 <h1 class="hero-title" id="heroTitle">CREATIVE PORTFOLIO</h1>
                 <h2 class="hero-subtitle" id="heroSubtitle">创意作品集</h2>
                 <a href="characters.html" class="cta-button">探索角色</a>
             </div>
 
-            <!-- 滚动提示 -->
             <div class="scroll-hint">
                 <div class="scroll-hint-text">SCROLL TO EXPLORE</div>
                 <div class="scroll-arrow"></div>
             </div>
         </section>
 
-        <!-- 页脚 -->
         <footer>
             <p>Created by @玉元一shadow | Powered by Drifting Veil Template</p>
         </footer>
     </div>
 
-    <!-- 数据文件（在脚本之前加载） -->
     <script>
-        // 默认数据（内嵌在页面中，确保一定能加载）
         window.PROFILE_DATA = {
             welcome: {
                 line1: "CREATIVE PORTFOLIO",
@@ -579,65 +565,43 @@
     <script src="data/profile.js"></script>
 
     <script>
-        // ================= 开屏动画逻辑 =================
         const splashWrapper = document.getElementById('splashWrapper');
         const mainPage = document.getElementById('mainPage');
 
-        // 2.3秒后开始展开动画
-        setTimeout(() => {
-            splashWrapper.classList.add('expand');
-        }, 2300);
-
-        // 3.1秒后开始淡出
-        setTimeout(() => {
-            splashWrapper.classList.add('fade-out');
-        }, 3100);
-
-        // 3.7秒后移除开屏动画，显示主页面
+        setTimeout(() => splashWrapper.classList.add('expand'), 2300);
+        setTimeout(() => splashWrapper.classList.add('fade-out'), 3100);
         setTimeout(() => {
             splashWrapper.remove();
             mainPage.classList.add('show');
             initMainPage();
         }, 3700);
 
-        // ================= 主页面初始化 =================
         function initMainPage() {
-            console.log('初始化主页面...');
-            console.log('PROFILE_DATA:', window.PROFILE_DATA);
-
             const profileData = window.PROFILE_DATA;
             
-            // 设置标题
             document.getElementById('heroTitle').textContent = profileData.welcome.line1;
             document.getElementById('heroSubtitle').textContent = profileData.welcome.line2;
             
-            // 设置背景图
             const bgImg = document.getElementById('heroBackgroundImg');
             if (profileData.heroBackground) {
                 bgImg.src = profileData.heroBackground;
                 bgImg.style.display = 'block';
             }
 
-            // 生成环绕标签
             const tags = profileData.tags;
             const tagsContainer = document.getElementById('tagsContainer');
-            const orbitRadius = 350; // 轨道半径
-
-            console.log('生成标签，数量:', tags.length);
+            const orbitRadius = 350;
 
             tags.forEach((tag, index) => {
                 const tagElement = document.createElement('div');
                 tagElement.className = 'tag-item';
                 
-                // 计算位置（圆形分布）
-                const angle = (index / tags.length) * Math.PI * 2 - Math.PI / 2; // 从顶部开始
-                const x = Math.cos(angle) * orbitRadius;
-                const y = Math.sin(angle) * orbitRadius;
+                const angle = (index / tags.length) * Math.PI * 2 - Math.PI / 2;
+                const x = 350 + Math.cos(angle) * orbitRadius;
+                const y = 350 + Math.sin(angle) * orbitRadius;
                 
-                // 设置位置（相对于容器中心）
-                tagElement.style.left = `50%`;
-                tagElement.style.top = `50%`;
-                tagElement.style.transform = `translate(calc(-50% + ${x}px), calc(-50% + ${y}px))`;
+                tagElement.style.left = x + 'px';
+                tagElement.style.top = y + 'px';
                 
                 tagElement.innerHTML = `
                     <span class="tag-short">${tag.short}</span>
@@ -645,13 +609,8 @@
                 `;
                 
                 tagsContainer.appendChild(tagElement);
-                
-                console.log(`标签 ${index + 1} 已创建:`, tag.short, `位置: (${x}, ${y})`);
             });
 
-            console.log('标签容器内容:', tagsContainer.innerHTML);
-
-            // 鼠标视差效果
             document.addEventListener('mousemove', (e) => {
                 const xNormal = (e.clientX / window.innerWidth) - 0.5;
                 const yNormal = (e.clientY / window.innerHeight) - 0.5;
@@ -678,7 +637,6 @@
                 });
             });
 
-            // 页面入场动画
             gsap.from('.hero-title', {
                 opacity: 0,
                 y: -50,
@@ -711,12 +669,11 @@
                 ease: "back.out(1.7)",
                 delay: 1.2
             });
-
-            console.log('主页面初始化完成');
         }
     </script>
 </body>
 </html>
+
 
 
 
