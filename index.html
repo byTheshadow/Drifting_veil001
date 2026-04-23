@@ -3,279 +3,242 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Drifting Veil - 蓝色梦幻</title>
-    
+    <title>Drifting Veil - 主页</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Noto+Serif+SC:wght@400;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
-    
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
-
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Noto+Serif+SC:wght@400;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --primary-blue: #A5C8ED;
-            --secondary-blue: #D1E3F8;
-            --bg-blue: #F8FAFD;
-            --text-blue: #5A7A9A;
-            --text-light: #7A9AB5;
-        }
-
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
+        :root {
+            --primary-blue: #4A90E2;
+            --deep-blue: #2C5F8D;
+            --light-blue: #87CEEB;
+            --accent-gold: #FFD700;
+            --text-light: #E8F4F8;
+            --bg-dark: #0A1628;
+        }
+
         body {
             font-family: 'Inter', 'Noto Serif SC', sans-serif;
-            background: linear-gradient(135deg, #F8FAFD 0%, #E8F4F8 100%);
-            color: var(--text-blue);
+            background: linear-gradient(135deg, var(--bg-dark) 0%, #1a2332 100%);
+            color: var(--text-light);
             overflow-x: hidden;
             cursor: none;
         }
 
-        /* ================= 自定义光标 ================= */
+        /* 自定义光标 */
         .custom-cursor {
-            position: fixed;
             width: 20px;
             height: 20px;
             border: 2px solid var(--primary-blue);
             border-radius: 50%;
+            position: fixed;
             pointer-events: none;
-            z-index: 10000;
+            z-index: 9999;
             transition: transform 0.15s ease;
             mix-blend-mode: difference;
         }
 
-        .cursor-dot {
-            position: fixed;
-            width: 6px;
-            height: 6px;
-            background: var(--primary-blue);
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: 10001;
-        }
-
         .custom-cursor.hover {
-            transform: scale(2);
-            background: rgba(165, 200, 237, 0.1);
-        }
-
-        /* ================= 开屏动画样式 ================= */
-        .splash-wrapper {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background: #FFFFFF;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 9999;
-            overflow: hidden;
-        }
-
-        .folder-icon {
-            opacity: 0;
-            transform: scale(0.8);
-            animation: folderAppear 0.6s ease-out forwards;
-        }
-
-        @keyframes folderAppear {
-            to {
-                opacity: 1;
-                transform: scale(1);
-            }
-        }
-
-        .folder-icon svg {
-            filter: drop-shadow(0 10px 30px rgba(165, 200, 237, 0.3));
-        }
-
-        .cursor-pointer {
-            position: absolute;
-            width: 24px;
-            height: 24px;
-            opacity: 0;
-            transform: translate(-150px, -150px);
-            animation: cursorMove 1.5s ease-in-out 0.8s forwards;
-            filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.15));
-        }
-
-        @keyframes cursorMove {
-            0% {
-                opacity: 0;
-                transform: translate(-150px, -150px);
-            }
-            20% {
-                opacity: 1;
-            }
-            60% {
-                opacity: 1;
-                transform: translate(0, 0);
-            }
-            70% {
-                transform: translate(0, 0) scale(0.9);
-            }
-            80% {
-                transform: translate(0, 0) scale(1);
-            }
-            100% {
-                opacity: 0;
-                transform: translate(0, 0);
-            }
-        }
-
-        .splash-wrapper.expand .folder-icon {
-            animation: folderExpand 0.8s ease-out forwards;
-        }
-
-        @keyframes folderExpand {
-            0% {
-                transform: scale(1);
-                opacity: 1;
-            }
-            50% {
-                transform: scale(1.5);
-                opacity: 0.8;
-            }
-            100% {
-                transform: scale(2);
-                opacity: 0;
-            }
-        }
-
-        .splash-wrapper.fade-out {
-            animation: splashFadeOut 0.6s ease-out forwards;
-        }
-
-        @keyframes splashFadeOut {
-            to {
-                opacity: 0;
-            }
-        }
-
-        /* ================= 主页面样式 ================= */
-        .main-page {
-            opacity: 0;
-            transition: opacity 0.5s ease;
-        }
-
-        .main-page.show {
-            opacity: 1;
+            transform: scale(1.5);
+            background: rgba(74, 144, 226, 0.3);
         }
 
         /* 导航栏 */
-        .navbar {
+        nav {
             position: fixed;
             top: 0;
-            left: 0;
-            right: 0;
-            height: 70px;
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(165, 200, 237, 0.2);
-            z-index: 1000;
+            width: 100%;
+            padding: 2rem 5%;
             display: flex;
-            align-items: center;
             justify-content: space-between;
-            padding: 0 60px;
+            align-items: center;
+            z-index: 1000;
+            background: rgba(10, 22, 40, 0.8);
+            backdrop-filter: blur(10px);
+            opacity: 1 !important;
+            visibility: visible !important;
         }
 
         .logo {
             font-family: 'Playfair Display', serif;
-            font-size: 1.5rem;
+            font-size: 1.8rem;
             font-weight: 700;
-            color: var(--text-blue);
-            letter-spacing: 2px;
+            color: var(--primary-blue);
+            opacity: 1 !important;
         }
 
         .nav-links {
             display: flex;
-            gap: 40px;
+            gap: 2.5rem;
             list-style: none;
+            opacity: 1 !important;
         }
 
         .nav-links a {
+            color: var(--text-light);
             text-decoration: none;
-            color: var(--text-blue);
-            font-size: 0.95rem;
             font-weight: 400;
-            letter-spacing: 1px;
-            transition: color 0.3s ease;
-            position: relative;
-        }
-
-        .nav-links a::after {
-            content: '';
-            position: absolute;
-            bottom: -5px;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: var(--primary-blue);
-            transition: width 0.3s ease;
+            transition: color 0.3s;
+            opacity: 1 !important;
         }
 
         .nav-links a:hover {
             color: var(--primary-blue);
         }
 
-        .nav-links a:hover::after {
-            width: 100%;
-        }
-
-        /* 主英雄区 */
-        .hero-section {
-            position: relative;
+        /* Hero 区域 */
+        .hero {
             height: 100vh;
             display: flex;
-            align-items: center;
+            flex-direction: column;
             justify-content: center;
+            align-items: center;
+            position: relative;
             overflow: hidden;
         }
 
-        /* 背景图层 */
-        .hero-background {
+        .hero-bg {
             position: absolute;
             top: 0;
             left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 0;
-        }
-
-        .hero-background img {
             width: 100%;
             height: 100%;
             object-fit: cover;
             opacity: 0.15;
-            filter: blur(2px);
+            z-index: 0;
         }
 
-        /* 漂浮星星 */
-        .stars-container {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+        /* 3D 行星系统 */
+        .planet-system {
+            position: relative;
+            width: 400px;
+            height: 400px;
+            margin: 3rem 0;
             z-index: 1;
-            pointer-events: none;
+            opacity: 1 !important;
+            visibility: visible !important;
         }
 
+        .planet-core {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, var(--light-blue), var(--primary-blue), var(--deep-blue));
+            box-shadow: 
+                0 0 60px rgba(74, 144, 226, 0.6),
+                inset -10px -10px 30px rgba(0, 0, 0, 0.3);
+            animation: planetRotate 20s linear infinite;
+            opacity: 1 !important;
+            visibility: visible !important;
+        }
+
+        @keyframes planetRotate {
+            from { transform: translate(-50%, -50%) rotate(0deg); }
+            to { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+
+        /* 行星环 */
+        .orbit-ring {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            border: 2px solid rgba(74, 144, 226, 0.3);
+            border-radius: 50%;
+            transform: translate(-50%, -50%) rotateX(60deg);
+            animation: orbitRotate 15s linear infinite;
+            opacity: 1 !important;
+            visibility: visible !important;
+        }
+
+        .orbit-ring:nth-child(2) { 
+            width: 250px; 
+            height: 250px; 
+            animation-duration: 12s;
+        }
+        .orbit-ring:nth-child(3) { 
+            width: 320px; 
+            height: 320px; 
+            animation-duration: 18s;
+        }
+        .orbit-ring:nth-child(4) { 
+            width: 390px; 
+            height: 390px; 
+            animation-duration: 24s;
+        }
+
+        @keyframes orbitRotate {
+            from { transform: translate(-50%, -50%) rotateX(60deg) rotateZ(0deg); }
+            to { transform: translate(-50%, -50%) rotateX(60deg) rotateZ(360deg); }
+        }
+
+        /* 标签系统 - 关键修复 */
+        .tag-item {
+            position: absolute;
+            padding: 0.6rem 1.2rem;
+            background: rgba(74, 144, 226, 0.15);
+            border: 1px solid var(--primary-blue);
+            border-radius: 20px;
+            font-size: 0.9rem;
+            white-space: nowrap;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+            /* 强制可见 */
+            opacity: 1 !important;
+            visibility: visible !important;
+            display: block !important;
+        }
+
+        .tag-item:hover {
+            background: rgba(74, 144, 226, 0.3);
+            transform: scale(1.1);
+            box-shadow: 0 0 20px rgba(74, 144, 226, 0.5);
+        }
+
+        .tag-item:hover .tag-full {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .tag-full {
+            position: absolute;
+            top: 120%;
+            left: 50%;
+            transform: translateX(-50%) translateY(-10px);
+            background: rgba(10, 22, 40, 0.95);
+            padding: 0.8rem 1.2rem;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            white-space: nowrap;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            pointer-events: none;
+            border: 1px solid var(--primary-blue);
+            z-index: 10;
+        }
+
+        /* 星星装饰 */
         .star {
             position: absolute;
-            width: 4px;
-            height: 4px;
-            background: var(--primary-blue);
+            width: 2px;
+            height: 2px;
+            background: white;
             border-radius: 50%;
-            box-shadow: 0 0 10px var(--primary-blue);
             animation: twinkle 3s ease-in-out infinite;
+            opacity: 1 !important;
+            visibility: visible !important;
         }
 
         @keyframes twinkle {
@@ -283,364 +246,74 @@
             50% { opacity: 1; transform: scale(1.5); }
         }
 
-        /* 中心圆球（行星） */
-        .center-planet {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 280px;
-            height: 280px;
-            margin-left: -140px;
-            margin-top: -140px;
-            z-index: 5;
-            transform-style: preserve-3d;
-            perspective: 1000px;
-        }
-
-        .planet-sphere {
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            background: radial-gradient(circle at 30% 30%, #E8F4F8, #A5C8ED 60%, #7A9AB5);
-            box-shadow: 
-                inset -20px -20px 50px rgba(90, 122, 154, 0.3),
-                inset 20px 20px 50px rgba(255, 255, 255, 0.5),
-                0 0 80px rgba(165, 200, 237, 0.4),
-                0 0 120px rgba(165, 200, 237, 0.2);
-            position: relative;
-            overflow: hidden;
-            animation: planetRotate 20s linear infinite;
-        }
-
-        @keyframes planetRotate {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-
-        .planet-sphere::before {
-            content: '';
-            position: absolute;
-            top: 10%;
-            left: 10%;
-            width: 40%;
-            height: 40%;
-            background: radial-gradient(circle, rgba(255, 255, 255, 0.6), transparent);
-            border-radius: 50%;
-            filter: blur(20px);
-        }
-
-        .planet-sphere::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 50%;
-            background: linear-gradient(to top, rgba(90, 122, 154, 0.3), transparent);
-            border-radius: 50%;
-        }
-
-        /* 行星环系统 */
-        .orbit-system {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            z-index: 4;
-            pointer-events: none;
-        }
-
-        .orbit-ring {
-            position: absolute;
-            border: 2px solid rgba(165, 200, 237, 0.3);
-            border-radius: 50%;
-            transform-style: preserve-3d;
-        }
-
-        .orbit-ring-1 {
-            width: 500px;
-            height: 500px;
-            margin-left: -250px;
-            margin-top: -250px;
-            animation: orbitRotate1 40s linear infinite;
-            border-style: dashed;
-        }
-
-        .orbit-ring-2 {
-            width: 700px;
-            height: 700px;
-            margin-left: -350px;
-            margin-top: -350px;
-            animation: orbitRotate2 60s linear infinite reverse;
-            border-style: solid;
-            opacity: 0.5;
-        }
-
-        .orbit-ring-3 {
-            width: 900px;
-            height: 900px;
-            margin-left: -450px;
-            margin-top: -450px;
-            animation: orbitRotate3 80s linear infinite;
-            border-style: dotted;
-            opacity: 0.3;
-        }
-
-        @keyframes orbitRotate1 {
-            from { transform: rotate(0deg) rotateX(60deg); }
-            to { transform: rotate(360deg) rotateX(60deg); }
-        }
-
-        @keyframes orbitRotate2 {
-            from { transform: rotate(0deg) rotateX(65deg); }
-            to { transform: rotate(360deg) rotateX(65deg); }
-        }
-
-        @keyframes orbitRotate3 {
-            from { transform: rotate(0deg) rotateX(70deg); }
-            to { transform: rotate(360deg) rotateX(70deg); }
-        }
-
-        /* 环绕标签系统 - 修复版 */
-        .tags-orbit {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 700px;
-            height: 700px;
-            margin-left: -350px;
-            margin-top: -350px;
-            z-index: 6;
-            pointer-events: none; /* 容器不接收事件 */
-        }
-
-        .tags-container {
-            position: relative;
-            width: 100%;
-            height: 100%;
-        }
-
-        .tag-item {
-            position: absolute;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            padding: 12px 24px;
-            border-radius: 50px;
-            font-size: 0.9rem;
-            font-weight: 500;
-            color: var(--text-blue);
-            cursor: pointer;
-            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-            box-shadow: 0 5px 20px rgba(165, 200, 237, 0.2);
-            white-space: nowrap;
-            border: 1px solid rgba(165, 200, 237, 0.3);
-            pointer-events: auto; /* 标签本身接收事件 */
-            transform: translate(-50%, -50%);
-            /* 移除可能导致消失的动画 */
-            animation: none !important;
+        /* 欢迎文字 */
+        .welcome-text {
+            text-align: center;
+            z-index: 1;
             opacity: 1 !important;
             visibility: visible !important;
         }
 
-        .tag-item:hover {
-            background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
-            color: white;
-            transform: translate(-50%, -50%) scale(1.2) translateY(-5px);
-            box-shadow: 0 15px 40px rgba(165, 200, 237, 0.5);
-            z-index: 100;
-        }
-
-        .tag-item:hover .tag-full {
-            opacity: 1;
-            max-height: 100px;
-            margin-top: 8px;
-        }
-
-        .tag-short {
-            display: block;
-            letter-spacing: 1px;
-        }
-
-        .tag-full {
-            display: block;
-            font-size: 0.75rem;
-            opacity: 0;
-            max-height: 0;
-            overflow: hidden;
-            transition: all 0.4s ease;
-            margin-top: 0;
-            font-weight: 400;
-        }
-
-        /* 标题区域 */
-        .hero-content {
-            position: relative;
-            z-index: 10;
-            text-align: center;
-            max-width: 900px;
-            padding: 0 40px;
-            margin-top: -100px;
-        }
-
-        .hero-title {
+        .welcome-text h1 {
             font-family: 'Playfair Display', serif;
-            font-size: 5rem;
-            font-weight: 700;
-            color: var(--text-blue);
-            margin-bottom: 20px;
-            letter-spacing: 5px;
-            line-height: 1.1;
-            text-shadow: 0 2px 20px rgba(165, 200, 237, 0.3);
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--light-blue), var(--primary-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            opacity: 1 !important;
         }
 
-        .hero-subtitle {
-            font-family: 'Noto Serif SC', serif;
-            font-size: 2rem;
-            color: var(--primary-blue);
-            margin-bottom: 60px;
-            font-weight: 400;
+        .welcome-text p {
+            font-size: 1.3rem;
+            color: var(--text-light);
+            opacity: 0.9;
         }
 
         /* CTA 按钮 */
-        .cta-button {
-            display: inline-block;
-            padding: 18px 50px;
-            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--secondary-blue) 100%);
-            color: white;
+        .cta-buttons {
+            display: flex;
+            gap: 1.5rem;
+            margin-top: 2rem;
+            z-index: 1;
+            opacity: 1 !important;
+            visibility: visible !important;
+        }
+
+        .cta-btn {
+            padding: 1rem 2.5rem;
+            border: 2px solid var(--primary-blue);
+            background: transparent;
+            color: var(--text-light);
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
             text-decoration: none;
-            border-radius: 50px;
-            font-size: 1.05rem;
-            font-weight: 500;
-            letter-spacing: 2px;
-            transition: all 0.4s ease;
-            box-shadow: 0 15px 35px rgba(165, 200, 237, 0.3);
-            position: relative;
-            overflow: hidden;
+            border-radius: 5px;
+            opacity: 1 !important;
         }
 
-        .cta-button::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
-            transition: left 0.5s ease;
-        }
-
-        .cta-button:hover::before {
-            left: 100%;
-        }
-
-        .cta-button:hover {
+        .cta-btn:hover {
+            background: var(--primary-blue);
             transform: translateY(-3px);
-            box-shadow: 0 20px 45px rgba(165, 200, 237, 0.5);
+            box-shadow: 0 10px 25px rgba(74, 144, 226, 0.3);
         }
 
-        /* 滚动提示 */
-        .scroll-hint {
-            position: absolute;
-            bottom: 40px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 10;
-            text-align: center;
-            opacity: 0.6;
-        }
-
-        .scroll-hint-text {
-            font-size: 0.75rem;
-            letter-spacing: 2px;
-            color: var(--text-blue);
-            margin-bottom: 10px;
-        }
-
-        .scroll-arrow {
-            width: 2px;
-            height: 40px;
-            background: linear-gradient(to bottom, var(--primary-blue), transparent);
-            margin: 0 auto;
-            animation: scrollDown 2s ease-in-out infinite;
-        }
-
-        @keyframes scrollDown {
-            0%, 100% { transform: translateY(0); opacity: 0.6; }
-            50% { transform: translateY(10px); opacity: 1; }
-        }
-
-        /* 页脚 */
-        footer {
-            padding: 40px;
-            text-align: center;
-            color: var(--primary-blue);
-            font-size: 0.9rem;
-            border-top: 1px solid rgba(165, 200, 237, 0.2);
-            background: rgba(255, 255, 255, 0.5);
-        }
-
-        /* 移动端适配 */
+        /* 响应式 */
         @media (max-width: 768px) {
-            body {
-                cursor: auto;
+            .planet-system {
+                width: 300px;
+                height: 300px;
             }
-
-            .custom-cursor, .cursor-dot {
-                display: none;
+            .planet-core {
+                width: 100px;
+                height: 100px;
             }
-
-            .navbar {
-                padding: 0 20px;
+            .welcome-text h1 {
+                font-size: 2.5rem;
             }
-
             .nav-links {
-                gap: 20px;
-                font-size: 0.85rem;
-            }
-
-            .hero-title {
-                font-size: 3rem;
-            }
-
-            .hero-subtitle {
-                font-size: 1.5rem;
-            }
-
-            .center-planet {
-                width: 200px;
-                height: 200px;
-                margin-left: -100px;
-                margin-top: -100px;
-            }
-
-            .tags-orbit {
-                width: 500px;
-                height: 500px;
-                margin-left: -250px;
-                margin-top: -250px;
-            }
-
-            .orbit-ring-1 {
-                width: 350px;
-                height: 350px;
-                margin-left: -175px;
-                margin-top: -175px;
-            }
-
-            .orbit-ring-2 {
-                width: 500px;
-                height: 500px;
-                margin-left: -250px;
-                margin-top: -250px;
-            }
-
-            .orbit-ring-3 {
-                display: none;
-            }
-
-            .tag-item {
-                font-size: 0.8rem;
-                padding: 10px 18px;
+                gap: 1rem;
             }
         }
     </style>
@@ -648,334 +321,191 @@
 <body>
     <!-- 自定义光标 -->
     <div class="custom-cursor"></div>
-    <div class="cursor-dot"></div>
 
-    <!-- ================= 开屏动画 ================= -->
-    <div class="splash-wrapper" id="splashWrapper">
-        <div class="folder-icon">
-            <svg width="120" height="120" viewBox="0 0 120 120" fill="none">
-                <path d="M20 30C20 25.5817 23.5817 22 28 22H48L56 30H92C96.4183 30 100 33.5817 100 38V90C100 94.4183 96.4183 98 92 98H28C23.5817 98 20 94.4183 20 90V30Z" 
-                      fill="#A5C8ED" stroke="#A5C8ED" stroke-width="2"/>
-            </svg>
-        </div>
+    <!-- 导航栏 -->
+    <nav>
+        <div class="logo">Drifting Veil</div>
+        <ul class="nav-links">
+            <li><a href="index.html">主页</a></li>
+            <li><a href="about.html">关于</a></li>
+            <li><a href="characters.html">角色</a></li>
+            <li><a href="gallery.html">画廊</a></li>
+        </ul>
+    </nav>
+
+    <!-- Hero 区域 -->
+    <section class="hero">
+        <img class="hero-bg" id="heroBg" src="" alt="">
         
-        <div class="cursor-pointer">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                <path d="M3 3L10.07 19.97L12.58 12.58L19.97 10.07L3 3Z" 
-                      fill="#5A7A9A" stroke="#5A7A9A" stroke-width="1.5"/>
-            </svg>
+        <div class="welcome-text">
+            <h1 id="welcomeLine1">加载中...</h1>
+            <p id="welcomeLine2">加载中...</p>
         </div>
-    </div>
 
-    <!-- ================= 主页面 ================= -->
-    <div class="main-page" id="mainPage">
-        <nav class="navbar">
-            <div class="logo">DRIFTING VEIL</div>
-            <ul class="nav-links">
-                <li><a href="index.html">首页</a></li>
-                <li><a href="characters.html">角色</a></li>
-                <li><a href="gallery.html">画廊</a></li>
-                <li><a href="about.html">关于</a></li>
-            </ul>
-        </nav>
+        <!-- 3D 行星系统 -->
+        <div class="planet-system">
+            <div class="planet-core"></div>
+            <div class="orbit-ring"></div>
+            <div class="orbit-ring"></div>
+            <div class="orbit-ring"></div>
+            <div id="tagsContainer"></div>
+        </div>
 
-        <section class="hero-section">
-            <!-- 背景图 -->
-            <div class="hero-background">
-                <img src="" alt="Background" id="heroBackgroundImg" style="display: none;">
-            </div>
-
-            <!-- 漂浮星星 -->
-            <div class="stars-container" id="starsContainer"></div>
-
-            <!-- 中心行星 -->
-            <div class="center-planet" id="centerPlanet">
-                <div class="planet-sphere"></div>
-            </div>
-
-            <!-- 行星环 -->
-            <div class="orbit-system">
-                <div class="orbit-ring orbit-ring-1"></div>
-                <div class="orbit-ring orbit-ring-2"></div>
-                <div class="orbit-ring orbit-ring-3"></div>
-            </div>
-
-            <!-- 环绕标签 -->
-            <div class="tags-orbit">
-                <div class="tags-container" id="tagsContainer"></div>
-            </div>
-
-            <!-- 标题内容 -->
-            <div class="hero-content">
-                <h1 class="hero-title" id="heroTitle">CREATIVE PORTFOLIO</h1>
-                <h2 class="hero-subtitle" id="heroSubtitle">创意作品集</h2>
-                <a href="characters.html" class="cta-button">探索角色</a>
-            </div>
-
-            <!-- 滚动提示 -->
-            <div class="scroll-hint">
-                <div class="scroll-hint-text">SCROLL TO EXPLORE</div>
-                <div class="scroll-arrow"></div>
-            </div>
-        </section>
-
-        <footer>
-            <p>Created by @玉元一shadow | Powered by Drifting Veil Template</p>
-        </footer>
-    </div>
+        <div class="cta-buttons">
+            <a href="about.html" class="cta-btn">了解更多</a>
+            <a href="characters.html" class="cta-btn">探索角色</a>
+        </div>
+    </section>
 
     <!-- 数据文件 -->
     <script src="data/profile.js"></script>
-
+    
+    <!-- GSAP -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    
     <script>
-        // ================= 自定义光标 =================
+        // 自定义光标
         const cursor = document.querySelector('.custom-cursor');
-        const cursorDot = document.querySelector('.cursor-dot');
-        
-        let mouseX = 0, mouseY = 0;
-        let cursorX = 0, cursorY = 0;
-        let dotX = 0, dotY = 0;
-
         document.addEventListener('mousemove', (e) => {
-            mouseX = e.clientX;
-            mouseY = e.clientY;
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
         });
 
-        function animateCursor() {
-            // 光标圈跟随（带延迟）
-            cursorX += (mouseX - cursorX) * 0.15;
-            cursorY += (mouseY - cursorY) * 0.15;
-            cursor.style.transform = `translate(${cursorX - 10}px, ${cursorY - 10}px)`;
-
-            // 光标点跟随（更快）
-            dotX += (mouseX - dotX) * 0.25;
-            dotY += (mouseY - dotY) * 0.25;
-            cursorDot.style.transform = `translate(${dotX - 3}px, ${dotY - 3}px)`;
-
-            requestAnimationFrame(animateCursor);
-        }
-        animateCursor();
-
-        // 悬停效果
-        document.querySelectorAll('a, .cta-button').forEach(el => {
+        document.querySelectorAll('a, button, .tag-item').forEach(el => {
             el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
             el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
         });
 
-        // ================= 开屏动画 =================
-        const splashWrapper = document.getElementById('splashWrapper');
-        const mainPage = document.getElementById('mainPage');
-
-        setTimeout(() => splashWrapper.classList.add('expand'), 2300);
-        setTimeout(() => splashWrapper.classList.add('fade-out'), 3100);
-        setTimeout(() => {
-            splashWrapper.remove();
-            mainPage.classList.add('show');
-            initMainPage();
-        }, 3700);
-
-        // ================= 主页面初始化 =================
-        function initMainPage() {
-            const profileData = window.PROFILE_DATA || {
-                welcome: { line1: "CREATIVE PORTFOLIO", line2: "创意作品集" },
+        // 加载数据
+        function loadData() {
+            const data = window.PROFILE_DATA || {
+                welcome: { line1: "欢迎来到", line2: "Drifting Veil" },
                 heroBackground: "",
-                tags: []
+                tags: [
+                    { short: "创意", full: "充满创意的设计理念" },
+                    { short: "技术", full: "前沿的技术实现" },
+                    { short: "美学", full: "独特的视觉美学" },
+                    { short: "故事", full: "引人入胜的叙事" },
+                    { short: "细节", full: "精致的细节打磨" },
+                    { short: "情感", full: "深刻的情感表达" },
+                    { short: "探索", full: "不断探索的精神" },
+                    { short: "梦想", full: "追逐梦想的勇气" }
+                ]
             };
-            
-            // 设置标题
-            document.getElementById('heroTitle').textContent = profileData.welcome.line1;
-            document.getElementById('heroSubtitle').textContent = profileData.welcome.line2;
-            
-            // 设置背景图（支持 URL）
-            const bgImg = document.getElementById('heroBackgroundImg');
-            if (profileData.heroBackground && profileData.heroBackground.trim() !== "") {
-                bgImg.src = profileData.heroBackground;
-                bgImg.style.display = 'block';
-                bgImg.onerror = () => {
-                    console.warn('背景图加载失败:', profileData.heroBackground);
-                    bgImg.style.display = 'none';
+
+            // 设置欢迎文字
+            document.getElementById('welcomeLine1').textContent = data.welcome.line1;
+            document.getElementById('welcomeLine2').textContent = data.welcome.line2;
+
+            // 设置背景图
+            const heroBg = document.getElementById('heroBg');
+            if (data.heroBackground) {
+                heroBg.src = data.heroBackground;
+                heroBg.onerror = () => {
+                    heroBg.style.display = 'none';
                 };
+            } else {
+                heroBg.style.display = 'none';
             }
 
-            // 生成星星
-            createStars();
-
             // 渲染标签
-            renderTags(profileData.tags);
-
-            // 鼠标视差效果
-            initParallax();
-
-            // GSAP 入场动画
-            initAnimations();
+            renderTags(data.tags);
+            
+            // 生成星星
+            generateStars();
         }
 
-        // ================= 生成星星 =================
-        function createStars() {
-            const container = document.getElementById('starsContainer');
-            const starCount = 30;
+        // 渲染标签
+        function renderTags(tags) {
+            const container = document.getElementById('tagsContainer');
+            const radius = 180;
+            const angleStep = (2 * Math.PI) / tags.length;
 
-            for (let i = 0; i < starCount; i++) {
+            tags.forEach((tag, index) => {
+                const angle = angleStep * index;
+                const x = Math.cos(angle) * radius;
+                const y = Math.sin(angle) * radius * 0.3; // 扁平化
+
+                const tagEl = document.createElement('div');
+                tagEl.className = 'tag-item';
+                tagEl.style.left = `calc(50% + ${x}px)`;
+                tagEl.style.top = `calc(50% + ${y}px)`;
+                tagEl.style.transform = 'translate(-50%, -50%)';
+                
+                tagEl.innerHTML = `
+                    ${tag.short}
+                    <div class="tag-full">${tag.full}</div>
+                `;
+
+                container.appendChild(tagEl);
+            });
+
+            console.log(`✅ 已渲染 ${tags.length} 个标签`);
+
+            // 强制确保标签可见
+            setTimeout(() => {
+                document.querySelectorAll('.tag-item').forEach(tag => {
+                    tag.style.opacity = '1';
+                    tag.style.visibility = 'visible';
+                    tag.style.display = 'block';
+                });
+            }, 100);
+        }
+
+        // 生成星星
+        function generateStars() {
+            const hero = document.querySelector('.hero');
+            for (let i = 0; i < 50; i++) {
                 const star = document.createElement('div');
                 star.className = 'star';
                 star.style.left = Math.random() * 100 + '%';
                 star.style.top = Math.random() * 100 + '%';
                 star.style.animationDelay = Math.random() * 3 + 's';
-                star.style.animationDuration = (2 + Math.random() * 3) + 's';
-                container.appendChild(star);
+                hero.appendChild(star);
             }
         }
 
-        // ================= 渲染标签 - 修复版 =================
-        function renderTags(tags) {
-            const tagsContainer = document.getElementById('tagsContainer');
-            tagsContainer.innerHTML = ''; // 清空
-            
-            if (!tags || tags.length === 0) {
-                console.warn('没有标签数据');
-                return;
-            }
-
-            const orbitRadius = 350;
-
-            tags.forEach((tag, index) => {
-                const tagElement = document.createElement('div');
-                tagElement.className = 'tag-item';
-                
-                // 计算位置
-                const angle = (index / tags.length) * Math.PI * 2 - Math.PI / 2;
-                const x = 350 + Math.cos(angle) * orbitRadius;
-                const y = 350 + Math.sin(angle) * orbitRadius;
-                
-                tagElement.style.left = x + 'px';
-                tagElement.style.top = y + 'px';
-                
-                // 设置内容
-                tagElement.innerHTML = `
-                    <span class="tag-short">${tag.short}</span>
-                    <span class="tag-full">${tag.full}</span>
-                `;
-                
-                // 添加到容器
-                tagsContainer.appendChild(tagElement);
-
-                // 悬停效果
-                tagElement.addEventListener('mouseenter', () => {
-                    cursor.classList.add('hover');
-                });
-                tagElement.addEventListener('mouseleave', () => {
-                    cursor.classList.remove('hover');
-                });
-            });
-
-            console.log(`✅ 已渲染 ${tags.length} 个标签`);
-        }
-
-        // ================= 鼠标视差效果 =================
-        function initParallax() {
-            const planet = document.getElementById('centerPlanet');
-            
-            document.addEventListener('mousemove', (e) => {
-                const xNormal = (e.clientX / window.innerWidth) - 0.5;
-                const yNormal = (e.clientY / window.innerHeight) - 0.5;
-                
-                // 行星 3D 旋转
-                if (typeof gsap !== 'undefined') {
-                    gsap.to(planet, {
-                        rotationY: xNormal * 30,
-                        rotationX: -yNormal * 30,
-                        duration: 1,
-                        ease: "power2.out"
-                    });
-
-                    // 标题视差
-                    gsap.to('.hero-title', {
-                        x: xNormal * 30,
-                        y: yNormal * 30,
-                        duration: 1,
-                        ease: "power2.out"
-                    });
-                    
-                    gsap.to('.hero-subtitle', {
-                                                x: xNormal * 20,
-                        y: yNormal * 20,
-                        duration: 1.2,
-                        ease: "power2.out"
-                    });
-                    
-                    // 标签轨道视差
-                    gsap.to('.tags-orbit', {
-                        x: xNormal * -15,
-                        y: yNormal * -15,
-                        duration: 1.5,
-                        ease: "power2.out"
-                    });
-
-                    // 星星视差
-                    gsap.to('.star', {
-                        x: xNormal * 20,
-                        y: yNormal * 20,
-                        duration: 2,
-                        ease: "power1.out",
-                        stagger: 0.02
-                    });
-                }
-            });
-        }
-
-        // ================= GSAP 入场动画 - 修复版 =================
+        // 初始化动画 - 移除所有 opacity 动画
         function initAnimations() {
-            if (typeof gsap === 'undefined') {
-                console.warn('GSAP 未加载');
-                return;
-            }
+            // 导航栏动画 - 只用 y 轴移动
+            gsap.from('nav', {
+                y: -100,
+                duration: 1,
+                ease: "power3.out"
+            });
 
-            // 标题入场
-            gsap.from('.hero-title', {
-                opacity: 0,
-                y: -50,
-                duration: 1.2,
-                ease: "power3.out",
+            // 欢迎文字动画 - 只用 scale
+            gsap.from('.welcome-text h1', {
+                scale: 0.5,
+                duration: 1,
+                ease: "back.out(1.7)",
                 delay: 0.3
             });
-            
-            gsap.from('.hero-subtitle', {
-                opacity: 0,
-                y: -30,
-                duration: 1.2,
-                ease: "power3.out",
+
+            gsap.from('.welcome-text p', {
+                y: 30,
+                duration: 0.8,
+                ease: "power2.out",
                 delay: 0.6
             });
-            
-            // 按钮入场
-            gsap.from('.cta-button', {
-                opacity: 0,
-                scale: 0.8,
-                duration: 0.8,
-                ease: "back.out(1.7)",
-                delay: 0.9
-            });
-            
-            // 行星入场
-            gsap.from('.center-planet', {
-                opacity: 0,
-                scale: 0.5,
-                duration: 1.5,
+
+            // 行星系统动画 - 只用 scale
+            gsap.from('.planet-core', {
+                scale: 0,
+                duration: 1.2,
                 ease: "elastic.out(1, 0.5)",
-                delay: 0.4
+                delay: 0.8
             });
 
-            // 行星环入场
             gsap.from('.orbit-ring', {
-                opacity: 0,
-                scale: 0.8,
-                duration: 1.2,
-                stagger: 0.2,
+                scale: 0,
+                duration: 1,
+                stagger: 0.15,
                 ease: "power2.out",
-                delay: 0.7
+                delay: 1
             });
-            
-            // 标签入场 - 修复：不要设置 opacity 为 0，只做位移动画
+
+            // 标签动画 - 只用 scale，完全不用 opacity
             gsap.from('.tag-item', {
                 scale: 0,
                 duration: 0.6,
@@ -983,7 +513,7 @@
                 ease: "back.out(1.7)",
                 delay: 1.2,
                 onComplete: () => {
-                    // 确保动画完成后标签可见
+                    // 动画完成后再次确保可见
                     document.querySelectorAll('.tag-item').forEach(tag => {
                         tag.style.opacity = '1';
                         tag.style.visibility = 'visible';
@@ -991,27 +521,34 @@
                 }
             });
 
-            // 星星入场
-            gsap.from('.star', {
-                opacity: 0,
-                scale: 0,
-                duration: 1,
-                stagger: 0.05,
+            // 按钮动画
+            gsap.from('.cta-btn', {
+                y: 50,
+                duration: 0.8,
+                stagger: 0.2,
                 ease: "power2.out",
-                delay: 1
+                delay: 1.5
             });
 
-            // 滚动提示
-            gsap.from('.scroll-hint', {
-                opacity: 0,
-                y: -20,
+            // 星星动画
+            gsap.from('.star', {
+                scale: 0,
                 duration: 1,
-                delay: 1.8
+                stagger: 0.02,
+                ease: "power1.out",
+                delay: 0.5
             });
         }
+
+        // 页面加载
+        window.addEventListener('DOMContentLoaded', () => {
+            loadData();
+            initAnimations();
+        });
     </script>
 </body>
 </html>
+
 
 
 
