@@ -1,0 +1,547 @@
+<!-- about.html - 关于页面 -->
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>关于 - Drifting Veil</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Noto+Serif+SC:wght@400;700&family=Inter:wght@300;400;500;600&family=Dancing+Script:wght@500;600&display=swap" rel="stylesheet">
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+
+    <style>
+        :root {
+            --primary-blue: #A5C8ED;
+            --secondary-blue: #D1E3F8;
+            --bg-blue: #F8FAFD;
+            --text-blue: #5A7A9A;
+            --text-light: #7A9AB5;
+            --white: #FFFFFF;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', 'Noto Serif SC', sans-serif;
+            background: linear-gradient(135deg, #fdfeff 0%, #E8F4F8 100%);
+            color: var(--text-blue);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow-x: hidden;
+            padding: 20px;
+        }
+
+        /* 导航栏 */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 70px;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(165, 200, 237, 0.2);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 60px;
+        }
+
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-blue);
+            letter-spacing: 2px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 40px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-blue);
+            font-size: 0.95rem;
+            font-weight: 400;
+            letter-spacing: 1px;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary-blue);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary-blue);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* 主容器 */
+        .about-container {
+            width: 100%;
+            max-width: 1000px;
+            min-height: 600px;
+            display: flex;
+            background: rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            border-radius: 16px;
+            box-shadow: 0 40px 100px rgba(90, 122, 154, 0.12);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            position: relative;
+            overflow: hidden;
+            margin-top: 70px;
+        }
+
+        /* 左侧导航 */
+        .nav-sidebar {
+            width: 280px;
+            padding: 80px 50px;
+            display: flex;
+            flex-direction: column;
+            border-right: 1px solid rgba(165, 200, 237, 0.2);
+            position: relative;
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .nav-item {
+            font-size: 0.8rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 40px;
+            cursor: pointer;
+            color: var(--text-blue);
+            opacity: 0.4;
+            transition: all 0.4s ease;
+            position: relative;
+            font-weight: 600;
+            padding-left: 0;
+        }
+
+        .nav-item:hover {
+            opacity: 0.8;
+            padding-left: 15px;
+        }
+
+        .nav-item.active {
+            opacity: 1;
+            padding-left: 25px;
+            color: var(--primary-blue);
+        }
+
+        /* 指示点 */
+        .active-dot {
+            position: absolute;
+            left: 30px;
+            width: 8px;
+            height: 8px;
+            background: var(--primary-blue);
+            border-radius: 50%;
+            top: 85px;
+            pointer-events: none;
+            box-shadow: 0 0 15px rgba(165, 200, 237, 0.6);
+        }
+
+        /* 右侧内容区 */
+        .content-area {
+            flex: 1;
+            display: flex;
+            padding: 80px 70px;
+            align-items: center;
+            gap: 60px;
+            position: relative;
+        }
+
+        .text-part {
+            flex: 1.3;
+            z-index: 2;
+        }
+
+        .greeting {
+            font-family: 'Playfair Display', serif;
+            font-size: 4rem;
+            line-height: 1.1;
+            margin-bottom: 30px;
+            color: var(--text-blue);
+            font-weight: 700;
+        }
+
+        .bio-text {
+            font-size: 1rem;
+            line-height: 1.9;
+            color: var(--text-light);
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* 拍立得照片 */
+        .photo-part {
+            flex: 0.9;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .polaroid-frame {
+            background: white;
+            padding: 15px 15px 55px 15px;
+            box-shadow: 0 25px 60px rgba(90, 122, 154, 0.15);
+            transform: rotate(3deg);
+            width: 280px;
+            position: relative;
+            overflow: hidden;
+            border-radius: 4px;
+            transition: all 0.5s ease;
+        }
+
+        .polaroid-frame:hover {
+            transform: rotate(0deg) scale(1.05);
+            box-shadow: 0 30px 70px rgba(90, 122, 154, 0.2);
+        }
+
+        .polaroid-frame img {
+            width: 100%;
+            height: 320px;
+            object-fit: cover;
+            display: block;
+            border-radius: 2px;
+        }
+
+        .photo-tag {
+            position: absolute;
+            bottom: 15px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.3rem;
+            color: var(--primary-blue);
+        }
+
+        /* 装饰圆圈 */
+        .decor-circle {
+            position: absolute;
+            width: 350px;
+            height: 350px;
+            border: 1px solid rgba(165, 200, 237, 0.15);
+            border-radius: 50%;
+            top: -80px;
+            right: -80px;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .decor-circle-2 {
+            position: absolute;
+            width: 250px;
+            height: 250px;
+            border: 1px solid rgba(165, 200, 237, 0.1);
+            border-radius: 50%;
+            bottom: -50px;
+            left: -50px;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* 响应式 */
+        @media (max-width: 1024px) {
+            .about-container {
+                flex-direction: column;
+                max-width: 90vw;
+            }
+
+            .nav-sidebar {
+                width: 100%;
+                flex-direction: row;
+                padding: 30px 40px;
+                overflow-x: auto;
+                border-right: none;
+                border-bottom: 1px solid rgba(165, 200, 237, 0.2);
+            }
+
+            .nav-item {
+                margin-bottom: 0;
+                margin-right: 30px;
+                white-space: nowrap;
+            }
+
+            .active-dot {
+                display: none;
+            }
+
+            .content-area {
+                flex-direction: column-reverse;
+                padding: 50px 40px;
+                text-align: center;
+                gap: 40px;
+            }
+
+            .greeting {
+                font-size: 3rem;
+            }
+
+            .polaroid-frame {
+                width: 240px;
+                transform: rotate(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 0 20px;
+            }
+
+            .nav-links {
+                gap: 20px;
+                font-size: 0.85rem;
+            }
+
+            .content-area {
+                padding: 40px 30px;
+            }
+
+            .greeting {
+                font-size: 2.5rem;
+            }
+
+            .bio-text {
+                font-size: 0.95rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="logo">DRIFTING VEIL</div>
+        <ul class="nav-links">
+            <li><a href="index.html">首页</a></li>
+            <li><a href="characters.html">角色</a></li>
+            <li><a href="#gallery">画廊</a></li>
+            <li><a href="about.html">关于</a></li>
+        </ul>
+    </nav>
+
+    <div class="about-container">
+        <!-- 侧边导航 -->
+        <nav class="nav-sidebar">
+            <div class="active-dot"></div>
+            <div class="nav-item active" onclick="switchContent(0, this)">Hello</div>
+            <div class="nav-item" onclick="switchContent(1, this)">Interests</div>
+            <div class="nav-item" onclick="switchContent(2, this)">Journey</div>
+            <div class="nav-item" onclick="switchContent(3, this)">Dreams</div>
+        </nav>
+
+        <!-- 内容区 -->
+        <div class="content-area">
+            <div class="decor-circle"></div>
+            <div class="decor-circle-2"></div>
+            
+            <div class="text-part">
+                <h1 class="greeting" id="content-title">你好，<br>我是创作者。</h1>
+                <p class="bio-text" id="content-text">
+                    欢迎来到我的创意世界。这里收藏着每一个角色的故事，每一幅作品的灵魂。
+                    我热爱用视觉语言讲述故事，用色彩和线条捕捉那些转瞬即逝的灵感。
+                    希望你能在这里找到共鸣，感受到创作的温度。
+                </p>
+            </div>
+
+            <div class="photo-part">
+                <div class="polaroid-frame" id="photo-frame">
+                    <img id="main-photo" src="assets/images/about/about-1.jpg" alt="About Me">
+                    <div class="photo-tag" id="photo-tag">我的工作室</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 数据文件 -->
+    <script src="data/about.js"></script>
+
+    <script>
+        // 默认数据（如果没有加载 about.js）
+        if (!window.ABOUT_DATA) {
+            window.ABOUT_DATA = [
+                {
+                    title: "你好，<br>我是创作者。",
+                    text: "欢迎来到我的创意世界。这里收藏着每一个角色的故事，每一幅作品的灵魂。我热爱用视觉语言讲述故事，用色彩和线条捕捉那些转瞬即逝的灵感。希望你能在这里找到共鸣，感受到创作的温度。",
+                    image: "assets/images/about/about-1.jpg",
+                    tag: "我的工作室"
+                },
+                {
+                    title: "创作<br>热情。",
+                    text: "关于我的兴趣：我热衷于角色设计、插画创作和视觉叙事。对我来说，每一个角色都是一个独立的世界，每一幅画都承载着一段故事。在创作之外，我喜欢收集灵感、阅读奇幻小说和探索新的艺术风格。",
+                    image: "assets/images/about/about-2.jpg",
+                    tag: "创作日常"
+                },
+                {
+                    title: "漫长的<br>旅程。",
+                    text: "一段旅程：从最初的涂鸦到现在的作品集，我的创作之路充满了探索与成长。这些年来，我学会了如何将想象转化为视觉，如何用作品与观众对话。每一次创作都是一次新的冒险。",
+                    image: "assets/images/about/about-3.jpg",
+                    tag: "成长轨迹"
+                },
+                {
+                    title: "未来的<br>梦想。",
+                    text: "未来的梦想：希望能创作出更多打动人心的角色和故事，建立属于自己的创作宇宙。愿每一个看到我作品的人，都能在其中找到属于自己的那份感动和共鸣。让我们一起在创意的海洋中航行。",
+                    image: "assets/images/about/about-4.jpg",
+                    tag: "梦想之地"
+                }
+            ];
+        }
+
+        const data = window.ABOUT_DATA;
+
+        function switchContent(index, element) {
+            // 1. 更新导航状态
+            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+            element.classList.add('active');
+
+            // 2. 移动指示点（桌面端）
+            const dot = document.querySelector('.active-dot');
+            if (window.innerWidth > 1024) {
+                const targetY = element.offsetTop + 5;
+                gsap.to(dot, { 
+                    top: targetY + 'px', 
+                    duration: 0.6, 
+                    ease: "back.out(1.7)" 
+                });
+            }
+
+            // 3. 内容转场动画
+            const timeline = gsap.timeline();
+
+            // 隐藏当前内容
+            timeline.to(["#content-title", "#content-text"], {
+                opacity: 0,
+                y: 20,
+                duration: 0.4,
+                stagger: 0.08
+            });
+
+            timeline.to("#photo-frame", {
+                opacity: 0,
+                scale: 0.9,
+                rotation: 0,
+                duration: 0.4
+            }, "<");
+
+            // 更新数据
+            timeline.call(() => {
+                document.getElementById('content-title').innerHTML = data[index].title;
+                document.getElementById('content-text').innerText = data[index].text;
+                document.getElementById('main-photo').src = data[index].image;
+                document.getElementById('photo-tag').innerText = data[index].tag;
+            });
+
+            // 显示新内容
+            timeline.to(["#content-title", "#content-text"], {
+                opacity: 1,
+                y: 0,
+                duration: 0.6,
+                stagger: 0.1,
+                ease: "power2.out"
+            });
+
+            // 照片框随机旋转效果
+            const randomRotation = (Math.random() - 0.5) * 10 + 3;
+            timeline.to("#photo-frame", {
+                opacity: 1,
+                scale: 1,
+                rotation: randomRotation,
+                duration: 1,
+                ease: "elastic.out(1, 0.5)"
+            }, "<0.2");
+        }
+
+        // 页面加载动画
+        window.addEventListener('load', () => {
+            gsap.from(".about-container", {
+                scale: 0.95,
+                opacity: 0,
+                duration: 1,
+                ease: "power3.out",
+                delay: 0.2
+            });
+
+            gsap.from(".nav-item", {
+                opacity: 0,
+                x: -20,
+                duration: 0.6,
+                stagger: 0.1,
+                ease: "power2.out",
+                delay: 0.5
+            });
+
+            gsap.from([".greeting", ".bio-text"], {
+                opacity: 0,
+                y: 30,
+                duration: 0.8,
+                stagger: 0.2,
+                ease: "power3.out",
+                delay: 0.8
+            });
+
+            gsap.from(".polaroid-frame", {
+                opacity: 0,
+                scale: 0.8,
+                rotation: -10,
+                duration: 1,
+                ease: "back.out(1.7)",
+                delay: 1
+            });
+        });
+
+        // 鼠标跟随效果（照片框）
+        const photoFrame = document.getElementById('photo-frame');
+        const contentArea = document.querySelector('.content-area');
+
+        contentArea.addEventListener('mousemove', (e) => {
+            const rect = contentArea.getBoundingClientRect();
+            const x = (e.clientX - rect.left - rect.width / 2) / rect.width;
+            const y = (e.clientY - rect.top - rect.height / 2) / rect.height;
+
+            gsap.to(photoFrame, {
+                x: x * 15,
+                y: y * 15,
+                duration: 0.8,
+                ease: "power2.out"
+            });
+        });
+
+        contentArea.addEventListener('mouseleave', () => {
+            gsap.to(photoFrame, {
+                x: 0,
+                y: 0,
+                duration: 0.8,
+                ease: "power2.out"
+            });
+        });
+    </script>
+</body>
+</html>
