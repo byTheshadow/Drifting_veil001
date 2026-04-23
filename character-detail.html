@@ -1,4 +1,4 @@
-<!-- character-detail.html - 角色详情页 -->
+<!-- character-detail.html - 完整版详情页 -->
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -8,7 +8,7 @@
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Noto+Serif+SC:wght@400;700&family=Inter:wght@300;400;500&family=Dancing+Script:wght@500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Noto+Serif+SC:wght@400;700&family=Inter:wght@300;400;500;800&family=Dancing+Script:wght@500&display=swap" rel="stylesheet">
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
@@ -34,17 +34,17 @@
             background-color: var(--bg-blue);
             color: var(--text-blue);
             overflow-x: hidden;
-            background-image: radial-gradient(circle at 80% 20%, #ffffff 0%, #E8F4F8 100%);
         }
 
-        /* 布局容器 */
+        /* ================= 第一屏：角色卡片区 ================= */
         .page-container {
             display: flex;
             min-height: 100vh;
             width: 100%;
+            background-image: radial-gradient(circle at 80% 20%, #ffffff 0%, #E8F4F8 100%);
         }
 
-        /* ================= 左侧：内容区 ================= */
+        /* 左侧内容 */
         .left-content {
             width: 55%;
             padding: 80px 100px;
@@ -101,7 +101,6 @@
             margin-bottom: 40px;
         }
 
-        /* 属性标签 */
         .attributes {
             display: flex;
             flex-wrap: wrap;
@@ -120,7 +119,7 @@
             box-shadow: 0 5px 15px rgba(165, 200, 237, 0.3);
         }
 
-        /* ================= 右侧：交互卡片区 ================= */
+        /* 右侧交互卡片 */
         .right-notes {
             width: 45%;
             position: relative;
@@ -138,7 +137,6 @@
             transform-style: preserve-3d;
         }
 
-        /* 角色主图 */
         .main-photo {
             width: 100%;
             height: 100%;
@@ -149,7 +147,6 @@
             border: 8px solid white;
         }
 
-        /* 浮动标签 */
         .floating-tag {
             position: absolute;
             background: rgba(255, 255, 255, 0.95);
@@ -166,7 +163,6 @@
             border: 1px solid rgba(165, 200, 237, 0.3);
         }
 
-        /* 手写笔记 */
         .handwritten-note {
             position: absolute;
             font-family: 'Dancing Script', cursive;
@@ -176,7 +172,6 @@
             text-shadow: 0 2px 10px rgba(165, 200, 237, 0.3);
         }
 
-        /* SVG 装饰线条 */
         .deco-svg {
             position: absolute;
             top: 0;
@@ -195,7 +190,6 @@
             opacity: 0.4;
         }
 
-        /* 标签位置 */
         .tag1 { top: -35px; left: 50%; transform: translateX(-50%); }
         .tag2 { right: -90px; top: 120px; }
         .tag3 { left: -110px; bottom: 180px; }
@@ -208,53 +202,219 @@
             line-height: 1.4;
         }
 
-        /* 响应式 */
-        @media (max-width: 1200px) {
-            .left-content {
-                padding: 60px 60px;
-            }
-            .character-name {
-                font-size: 4rem;
-            }
+        /* ================= 第二屏：编辑区模块 ================= */
+        .editorial-section {
+            padding: 120px 5%;
+            background-color: #FFFFFF;
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 30px;
+            position: relative;
         }
 
-        @media (max-width: 1024px) {
-            .page-container { 
-                flex-direction: column-reverse; 
-            }
-            .left-content, .right-notes { 
-                width: 100%; 
-                padding: 40px; 
-            }
-            .right-notes { 
-                min-height: 600px; 
-            }
-            .character-name { 
-                font-size: 3.5rem; 
-            }
-            .character-board {
-                width: 300px;
-                height: 440px;
-            }
-            /* 移动端隐藏部分浮动标签 */
-            .tag2, .tag3 {
-                display: none;
-            }
+        .section-meta {
+            grid-column: 1 / 4;
+            font-size: 0.7rem;
+            letter-spacing: 2px;
+            border-top: 2px solid var(--primary-blue);
+            padding-top: 15px;
+            margin-bottom: 50px;
+            color: var(--text-light);
+            text-transform: uppercase;
         }
 
-        @media (max-width: 768px) {
-            .left-content {
-                padding: 30px 20px;
-            }
-            .character-name {
-                font-size: 2.8rem;
-            }
-            .character-quote {
-                font-size: 1.1rem;
-            }
-            .character-description {
-                font-size: 0.95rem;
-            }
+        .big-title {
+            grid-column: 7 / 13;
+            font-family: 'Inter', sans-serif;
+            font-weight: 800;
+            font-size: 4rem;
+            line-height: 1;
+            text-transform: uppercase;
+            color: var(--text-blue);
+            margin-bottom: 40px;
+        }
+
+        .module-wrapper {
+            grid-column: 1 / 13;
+            display: flex;
+            gap: 80px;
+            margin-top: 50px;
+        }
+
+        /* 拍立得照片组 */
+        .photo-grid {
+            flex: 1;
+            position: relative;
+            min-height: 650px;
+        }
+
+        .polaroid {
+            position: absolute;
+            background: white;
+            padding: 15px 15px 50px 15px;
+            box-shadow: 0 20px 40px rgba(90, 122, 154, 0.15);
+            width: 300px;
+            transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer;
+            z-index: 1;
+            border-radius: 4px;
+        }
+
+        .polaroid img {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+            border-radius: 2px;
+        }
+
+        .polaroid .caption {
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.1rem;
+            color: var(--primary-blue);
+            margin-top: 15px;
+            text-align: center;
+        }
+
+        /* 初始错落位置 */
+        .p-1 { transform: rotate(-5deg); left: 0; top: 0; }
+        .p-2 { transform: rotate(3deg); left: 220px; top: 80px; }
+        .p-3 { transform: rotate(-2deg); left: 120px; top: 350px; }
+
+        .polaroid:hover {
+            transform: rotate(0deg) scale(1.1) translateY(-20px) !important;
+            z-index: 10;
+            box-shadow: 0 40px 80px rgba(90, 122, 154, 0.25);
+        }
+
+        /* 文本区 */
+        .text-columns {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+        }
+
+        .text-block-blue {
+            background: var(--secondary-blue);
+            padding: 45px;
+            color: var(--text-blue);
+            font-size: 0.95rem;
+            line-height: 1.9;
+            border-left: 4px solid var(--primary-blue);
+            border-radius: 4px;
+        }
+
+        .text-block-white {
+            padding: 0 45px;
+            color: var(--text-light);
+            font-size: 0.95rem;
+            line-height: 1.9;
+        }
+
+        .highlight-text {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 25px;
+            display: block;
+            color: var(--text-blue);
+        }
+                /* ================= 第三屏：画廊网格区 ================= */
+        .gallery-section {
+            padding: 120px 5%;
+            background: linear-gradient(135deg, var(--bg-blue) 0%, #E8F4F8 100%);
+            position: relative;
+        }
+
+        .gallery-header {
+            text-align: center;
+            margin-bottom: 80px;
+        }
+
+        .gallery-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 3.5rem;
+            font-weight: 700;
+            color: var(--text-blue);
+            margin-bottom: 20px;
+        }
+
+        .gallery-subtitle {
+            font-size: 1.1rem;
+            color: var(--text-light);
+            letter-spacing: 2px;
+        }
+
+        /* 瀑布流网格 */
+        .masonry-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .gallery-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.5s ease;
+            background: white;
+            box-shadow: 0 10px 30px rgba(90, 122, 154, 0.1);
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s ease;
+        }
+
+        .gallery-item:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 50px rgba(90, 122, 154, 0.2);
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.1);
+        }
+
+        .gallery-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 25px;
+            background: linear-gradient(to top, rgba(165, 200, 237, 0.95) 0%, transparent 100%);
+            transform: translateY(100%);
+            transition: transform 0.4s ease;
+        }
+
+        .gallery-item:hover .gallery-overlay {
+            transform: translateY(0);
+        }
+
+        .gallery-item-title {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 5px;
+        }
+
+        .gallery-item-desc {
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        /* 不同高度的网格项 */
+        .gallery-item:nth-child(3n+1) { grid-row: span 2; }
+        .gallery-item:nth-child(5n+2) { grid-row: span 1; }
+
+        /* ================= 滚动触发的视差效果 ================= */
+        .parallax-element {
+            will-change: transform;
         }
 
         /* 加载动画 */
@@ -277,6 +437,82 @@
             color: var(--primary-blue);
             letter-spacing: 3px;
         }
+
+        /* 响应式 */
+        @media (max-width: 1200px) {
+            .left-content {
+                padding: 60px 60px;
+            }
+            .character-name {
+                font-size: 4rem;
+            }
+            .big-title {
+                font-size: 3rem;
+            }
+        }
+
+        @media (max-width: 1024px) {
+            .page-container { 
+                flex-direction: column-reverse; 
+            }
+            .left-content, .right-notes { 
+                width: 100%; 
+                padding: 40px; 
+            }
+            .right-notes { 
+                min-height: 600px; 
+            }
+            .character-name { 
+                font-size: 3.5rem; 
+            }
+            .character-board {
+                width: 300px;
+                height: 440px;
+            }
+            .tag2, .tag3 {
+                display: none;
+            }
+            .editorial-section {
+                display: block;
+                padding: 80px 40px;
+            }
+            .big-title {
+                font-size: 2.5rem;
+                margin-bottom: 40px;
+            }
+            .module-wrapper {
+                flex-direction: column;
+                gap: 50px;
+            }
+            .photo-grid {
+                min-height: 500px;
+            }
+            .polaroid {
+                width: 240px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .left-content {
+                padding: 30px 20px;
+            }
+            .character-name {
+                font-size: 2.8rem;
+            }
+            .character-quote {
+                font-size: 1.1rem;
+            }
+            .character-description {
+                font-size: 0.95rem;
+            }
+            .masonry-grid {
+                grid-template-columns: 1fr;
+            }
+            .gallery-item:nth-child(3n+1),
+            .gallery-item:nth-child(5n+2) {
+                grid-row: span 1;
+            }
+        }
     </style>
 </head>
 <body>
@@ -285,93 +521,144 @@
         <div class="loading-text">LOADING...</div>
     </div>
 
+    <!-- ================= 第一屏：角色卡片 ================= -->
     <div class="page-container">
-        <!-- 左侧：文本内容 -->
         <div class="left-content">
             <div class="back-btn" onclick="window.location.href='characters.html'">
                 ← 返回角色画廊
             </div>
             
-            <h1 class="character-name" id="charName">角色名称</h1>
+            <h1 class="character-name parallax-element" id="charName">角色名称</h1>
             
-            <div class="character-quote" id="charQuote">
+            <div class="character-quote parallax-element" id="charQuote">
                 "这里是角色的经典台词或座右铭"
             </div>
             
-            <div class="character-description" id="charDesc">
-                角色的详细描述将在这里显示。包括背景故事、性格特点、能力介绍等内容。
+            <div class="character-description parallax-element" id="charDesc">
+                角色的详细描述将在这里显示。
             </div>
 
-            <div class="attributes" id="charAttributes">
-                <!-- 属性标签将由 JS 动态生成 -->
-            </div>
+            <div class="attributes" id="charAttributes"></div>
         </div>
 
-        <!-- 右侧：交互卡片 -->
         <div class="right-notes" id="scene">
-            
             <svg class="deco-svg" viewBox="0 0 500 600">
-                <!-- 装饰线条 -->
                 <path class="deco-path" d="M250,50 Q300,80 350,110" id="path1" />
                 <path class="deco-path" d="M400,200 Q450,250 420,350" id="path2" />
                 <path class="deco-path" d="M120,300 Q80,320 50,380" id="path3" />
             </svg>
 
             <div class="character-board" id="card">
-                <!-- 角色大图 -->
                 <img src="" alt="Character" class="main-photo" id="charImage">
                 
-                <!-- 浮动标签 -->
                 <div class="floating-tag tag1" id="tag1">标签1</div>
                 <div class="floating-tag tag2" id="tag2">标签2</div>
                 <div class="floating-tag tag3" id="tag3">标签3</div>
                 <div class="floating-tag tag4" id="tag4">标签4</div>
 
-                <!-- 手写笔记 -->
                 <div class="handwritten-note note1" id="note1">
                     A soul drifting in the blue dream...
                 </div>
             </div>
-
         </div>
     </div>
+
+    <!-- ================= 第二屏：编辑区 ================= -->
+    <section class="editorial-section">
+        <div class="section-meta parallax-element">
+            PAGE 02 <br> EDITORIAL SECTION
+        </div>
+
+        <h2 class="big-title parallax-element" id="editorialTitle">
+            THE CREATIVE<br>VISION BEHIND<br>THE CHARACTER
+        </h2>
+
+        <div class="module-wrapper">
+            <!-- 拍立得照片组 -->
+            <div class="photo-grid">
+                <div class="polaroid p-1" id="polaroid1">
+                    <img src="" alt="Gallery 1" id="galleryImg1">
+                    <div class="caption" id="caption1">Memory Fragment 01</div>
+                </div>
+                <div class="polaroid p-2" id="polaroid2">
+                    <img src="" alt="Gallery 2" id="galleryImg2">
+                    <div class="caption" id="caption2">Memory Fragment 02</div>
+                </div>
+                <div class="polaroid p-3" id="polaroid3">
+                    <img src="" alt="Gallery 3" id="galleryImg3">
+                    <div class="caption" id="caption3">Memory Fragment 03</div>
+                </div>
+            </div>
+
+            <!-- 文本区 -->
+            <div class="text-columns">
+                <div class="text-block-blue reveal-text">
+                    <span class="highlight-text" id="storyTitle">角色故事</span>
+                    <p id="storyContent">
+                        这里是角色的深度故事内容，可以包含背景设定、成长经历、重要转折点等。
+                        用户可以在数据文件中自由编辑这部分内容。
+                    </p>
+                </div>
+                
+                <div class="text-block-white reveal-text">
+                    <p id="extendedDesc">
+                        这里可以放置更多的角色细节描述，比如性格特点、能力解析、人际关系等。
+                        支持多段落的长文本内容，让角色形象更加立体丰满。
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================= 第三屏：画廊网格 ================= -->
+    <section class="gallery-section">
+        <div class="gallery-header">
+            <h2 class="gallery-title parallax-element">CHARACTER GALLERY</h2>
+            <p class="gallery-subtitle parallax-element">更多精彩瞬间</p>
+        </div>
+
+        <div class="masonry-grid" id="galleryGrid">
+            <!-- 画廊项目由 JS 动态生成 -->
+        </div>
+    </section>
+
+    <!-- 页脚 -->
+    <footer style="background: white; padding: 40px; text-align: center; color: var(--primary-blue); font-size: 0.9rem;">
+        <p>Created by @玉元一shadow | Powered by Drifting Veil Template</p>
+    </footer>
 
     <!-- 数据文件 -->
     <script src="data/characters.js"></script>
 
     <script>
-        // 获取 URL 参数中的角色 ID
+        gsap.registerPlugin(ScrollTrigger);
+
+        // 获取角色数据
         const urlParams = new URLSearchParams(window.location.search);
         const characterId = parseInt(urlParams.get('id'));
-
-        // 从数据文件中获取角色信息
         const characters = window.CHARACTERS_DATA || [];
         const character = characters.find(c => c.id === characterId);
 
-        // 如果找不到角色，返回列表页
         if (!character) {
             alert('角色不存在');
             window.location.href = 'characters.html';
         }
 
-        // 填充页面内容
+        // ================= 填充第一屏数据 =================
         document.getElementById('charName').textContent = character.name || '未知角色';
         document.getElementById('charQuote').textContent = character.quote || '"..."';
         document.getElementById('charDesc').textContent = character.description || '暂无描述';
         document.getElementById('charImage').src = character.image || '';
         document.getElementById('charImage').alt = character.name || 'Character';
 
-        // 填充浮动标签
         const tags = character.tags || ['神秘', '优雅', '强大', '梦幻'];
         document.getElementById('tag1').textContent = tags[0] || '';
         document.getElementById('tag2').textContent = tags[1] || '';
         document.getElementById('tag3').textContent = tags[2] || '';
         document.getElementById('tag4').textContent = tags[3] || '';
 
-        // 填充手写笔记
         document.getElementById('note1').textContent = character.note || 'A soul drifting in the blue dream...';
 
-        // 填充属性标签
         const attributes = character.attributes || ['原创角色', '主角', '魔法系'];
         const attributesContainer = document.getElementById('charAttributes');
         attributes.forEach(attr => {
@@ -381,9 +668,51 @@
             attributesContainer.appendChild(tag);
         });
 
-        // 页面加载完成后执行动画
+        // ================= 填充第二屏数据 =================
+        document.getElementById('editorialTitle').innerHTML = character.editorialTitle || 
+            'THE CREATIVE<br>VISION BEHIND<br>THE CHARACTER';
+        
+        // 拍立得照片
+        const galleryImages = character.galleryImages || [
+            character.image, character.image, character.image
+        ];
+        const captions = character.captions || [
+            'Memory Fragment 01', 'Memory Fragment 02', 'Memory Fragment 03'
+        ];
+        
+        document.getElementById('galleryImg1').src = galleryImages[0];
+        document.getElementById('galleryImg2').src = galleryImages[1];
+        document.getElementById('galleryImg3').src = galleryImages[2];
+        document.getElementById('caption1').textContent = captions[0];
+        document.getElementById('caption2').textContent = captions[1];
+        document.getElementById('caption3').textContent = captions[2];
+
+        // 故事文本
+        document.getElementById('storyTitle').textContent = character.storyTitle || '角色故事';
+        document.getElementById('storyContent').textContent = character.storyContent || 
+            '这里是角色的深度故事内容...';
+        document.getElementById('extendedDesc').textContent = character.extendedDesc || 
+            '这里可以放置更多的角色细节描述...';
+
+        // ================= 填充第三屏画廊 =================
+        const moreGallery = character.moreGallery || [];
+        const galleryGrid = document.getElementById('galleryGrid');
+        
+        moreGallery.forEach((item, index) => {
+            const galleryItem = document.createElement('div');
+            galleryItem.className = 'gallery-item';
+            galleryItem.innerHTML = `
+                <img src="${item.image}" alt="${item.title}">
+                <div class="gallery-overlay">
+                    <div class="gallery-item-title">${item.title}</div>
+                    <div class="gallery-item-desc">${item.desc}</div>
+                </div>
+            `;
+            galleryGrid.appendChild(galleryItem);
+        });
+
+        // ================= 页面加载动画 =================
         window.addEventListener('load', () => {
-            // 隐藏加载遮罩
             setTimeout(() => {
                 document.getElementById('loading').style.opacity = '0';
                 setTimeout(() => {
@@ -391,80 +720,43 @@
                 }, 500);
             }, 300);
 
-            // 1. 文字入场动画
+            // 第一屏入场动画
             gsap.from(".character-name", { 
-                opacity: 0, 
-                x: -50, 
-                duration: 1, 
-                ease: "power3.out", 
-                delay: 0.3 
+                opacity: 0, x: -50, duration: 1, ease: "power3.out", delay: 0.3 
             });
-            
             gsap.from(".character-quote", { 
-                opacity: 0, 
-                x: -30, 
-                duration: 1, 
-                ease: "power3.out", 
-                delay: 0.6 
+                opacity: 0, x: -30, duration: 1, ease: "power3.out", delay: 0.6 
             });
-            
             gsap.from(".character-description", { 
-                opacity: 0, 
-                y: 20, 
-                duration: 1, 
-                ease: "power3.out", 
-                delay: 0.9 
+                opacity: 0, y: 20, duration: 1, ease: "power3.out", delay: 0.9 
             });
-
             gsap.from(".attribute-tag", { 
-                opacity: 0, 
-                scale: 0, 
-                duration: 0.6, 
-                stagger: 0.1, 
-                ease: "back.out(1.7)", 
-                delay: 1.2 
+                opacity: 0, scale: 0, duration: 0.6, stagger: 0.1, 
+                ease: "back.out(1.7)", delay: 1.2 
             });
-
-            // 2. 右侧卡片和标签入场
             gsap.from(".character-board", { 
-                opacity: 0, 
-                scale: 0.8, 
-                duration: 1, 
-                ease: "power3.out", 
-                delay: 0.5 
+                opacity: 0, scale: 0.8, duration: 1, ease: "power3.out", delay: 0.5 
             });
-
             gsap.from(".floating-tag", { 
-                opacity: 0, 
-                scale: 0, 
-                duration: 0.8, 
-                stagger: 0.15, 
-                ease: "back.out(1.7)", 
-                delay: 1 
+                opacity: 0, scale: 0, duration: 0.8, stagger: 0.15, 
+                ease: "back.out(1.7)", delay: 1 
             });
-
             gsap.from(".handwritten-note", { 
-                opacity: 0, 
-                y: 20, 
-                duration: 1, 
-                ease: "power3.out", 
-                delay: 1.5 
+                opacity: 0, y: 20, duration: 1, ease: "power3.out", delay: 1.5 
             });
 
-            // 3. SVG 线条生长动画
+            // SVG 线条生长
             document.querySelectorAll('.deco-path').forEach(path => {
                 const length = path.getTotalLength();
                 gsap.set(path, { strokeDasharray: length, strokeDashoffset: length });
                 gsap.to(path, { 
-                    strokeDashoffset: 0, 
-                    duration: 1.5, 
-                    ease: "power2.inOut", 
-                    delay: 1.3 
+                    strokeDashoffset: 0, duration: 1.5, 
+                    ease: "power2.inOut", delay: 1.3 
                 });
             });
         });
 
-        // 4. 核心交互：3D 卡片跟随鼠标
+        // ================= 3D 卡片跟随鼠标 =================
         const card = document.getElementById('card');
         const scene = document.getElementById('scene');
 
@@ -473,7 +765,6 @@
             const x = e.clientX - rect.left - rect.width / 2;
             const y = e.clientY - rect.top - rect.height / 2;
 
-            // 卡片倾斜
             gsap.to(card, {
                 rotationY: x * 0.04,
                 rotationX: -y * 0.04,
@@ -482,7 +773,6 @@
                 ease: "power2.out"
             });
 
-            // 标签视差效果
             gsap.to(".floating-tag", {
                 x: (i) => x * (0.02 + i * 0.008),
                 y: (i) => y * (0.02 + i * 0.008),
@@ -490,7 +780,6 @@
                 ease: "power2.out"
             });
 
-            // 手写笔记微动
             gsap.to(".handwritten-note", {
                 x: x * 0.03,
                 y: y * 0.03,
@@ -500,22 +789,170 @@
             });
         });
 
-        // 鼠标离开恢复
         scene.addEventListener('mouseleave', () => {
             gsap.to(card, { 
-                rotationX: 0, 
-                rotationY: 0, 
-                duration: 1,
-                ease: "power2.out"
+                rotationX: 0, rotationY: 0, duration: 1, ease: "power2.out"
             });
             gsap.to(".floating-tag, .handwritten-note", { 
-                x: 0, 
-                y: 0, 
-                rotation: 0, 
-                duration: 1,
-                ease: "power2.out"
+                x: 0, y: 0, rotation: 0, duration: 1, ease: "power2.out"
             });
+        });
+
+        // ================= 滚动触发动画 =================
+        
+        // 第二屏标题入场
+        gsap.from(".big-title", {
+            scrollTrigger: {
+                trigger: ".big-title",
+                start: "top 80%",
+            },
+            opacity: 0,
+            y: 100,
+            duration: 1.2,
+            ease: "power4.out"
+        });
+
+        // 拍立得照片错落滑入 + 物理效果
+        gsap.from(".polaroid", {
+            scrollTrigger: {
+                trigger: ".photo-grid",
+                start: "top 70%",
+            },
+            opacity: 0,
+            y: 80,
+            stagger: 0.3,
+            rotation: 20,
+            duration: 1.5,
+            ease: "expo.out"
+        });
+
+        // 拍立得物理互动（拖拽效果）
+        document.querySelectorAll('.polaroid').forEach(polaroid => {
+            let isDragging = false;
+            let startX, startY, initialX, initialY;
+
+            polaroid.addEventListener('mousedown', (e) => {
+                isDragging = true;
+                startX = e.clientX;
+                startY = e.clientY;
+                const transform = window.getComputedStyle(polaroid).transform;
+                if (transform !== 'none') {
+                    const matrix = new DOMMatrix(transform);
+                    initialX = matrix.m41;
+                    initialY = matrix.m42;
+                } else {
+                    initialX = 0;
+                    initialY = 0;
+                }
+                polaroid.style.cursor = 'grabbing';
+                polaroid.style.zIndex = '100';
+            });
+
+            document.addEventListener('mousemove', (e) => {
+                if (!isDragging) return;
+                const deltaX = e.clientX - startX;
+                const deltaY = e.clientY - startY;
+                gsap.to(polaroid, {
+                    x: initialX + deltaX,
+                    y: initialY + deltaY,
+                    duration: 0.1,
+                    rotation: deltaX * 0.1
+                });
+            });
+
+            document.addEventListener('mouseup', () => {
+                if (isDragging) {
+                    isDragging = false;
+                    polaroid.style.cursor = 'pointer';
+                    // 回弹效果
+                    gsap.to(polaroid, {
+                        rotation: 0,
+                        duration: 0.5,
+                        ease: "elastic.out(1, 0.5)"
+                    });
+                }
+            });
+        });
+
+        // 文本块入场
+        gsap.from(".reveal-text", {
+            scrollTrigger: {
+                trigger: ".text-columns",
+                start: "top 80%",
+            },
+            opacity: 0,
+            x: 50,
+            duration: 1,
+            stagger: 0.4,
+            ease: "power2.out"
+        });
+
+        // 第三屏画廊入场
+        gsap.from(".gallery-title", {
+            scrollTrigger: {
+                trigger: ".gallery-header",
+                start: "top 80%",
+            },
+            opacity: 0,
+            y: 50,
+            duration: 1,
+            ease: "power3.out"
+        });
+
+        gsap.from(".gallery-item", {
+            scrollTrigger: {
+                trigger: ".masonry-grid",
+                start: "top 80%",
+            },
+            opacity: 0,
+            y: 60,
+            stagger: 0.15,
+            duration: 0.8,
+            ease: "power2.out"
+        });
+
+        // ================= 滚动视差效果 =================
+        gsap.utils.toArray('.parallax-element').forEach((element, i) => {
+            const speed = 0.5 + (i * 0.1);
+            gsap.to(element, {
+                y: () => -ScrollTrigger.maxScroll(window) * speed * 0.05,
+                ease: "none",
+                scrollTrigger: {
+                    start: 0,
+                    end: "max",
+                    invalidateOnRefresh: true,
+                    scrub: 0.5
+                }
+            });
+        });
+
+        // 第一屏滚动时渐隐效果
+        gsap.to(".page-container", {
+            opacity: 0.3,
+            scale: 0.95,
+            scrollTrigger: {
+                trigger: ".page-container",
+                start: "top top",
+                end: "bottom top",
+                scrub: 1
+            }
+        });
+
+        // 编辑区滚动时放大效果
+        gsap.from(".editorial-section", {
+            scale: 0.9,
+            opacity: 0.5,
+            scrollTrigger: {
+                trigger: ".editorial-section",
+                start: "top bottom",
+                end: "top center",
+                scrub: 1
+            }
         });
     </script>
 </body>
 </html>
+
+
+        
+
