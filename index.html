@@ -1,120 +1,213 @@
+<!-- index.html - 简化版主页 -->
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Drifting Veil - 作品展示</title>
-  
-  <!-- 优雅字体 -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Noto+Serif+SC:wght@300;400;500;600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-  
-  <!-- 样式文件 -->
-  <link rel="stylesheet" href="styles/base.css">
-  <link rel="stylesheet" href="styles/theme-blue-dream.css">
-  <link rel="stylesheet" href="styles/components.css">
-  
-  <!-- 配置文件 -->
-  <script src="config.js"></script>
-  <script src="data/profile.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drifting Veil - 蓝色梦幻</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Noto+Serif+SC:wght@400;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="styles/base.css">
+    <link rel="stylesheet" href="styles/theme-blue-dream.css">
+    
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', 'Noto Serif SC', sans-serif;
+            background: linear-gradient(135deg, #F8FAFD 0%, #E8F4F8 100%);
+            min-height: 100vh;
+        }
+
+        /* 导航栏 */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 70px;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(165, 200, 237, 0.2);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 60px;
+        }
+
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #5A7A9A;
+            letter-spacing: 2px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 40px;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #5A7A9A;
+            font-size: 0.95rem;
+            font-weight: 400;
+            letter-spacing: 1px;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #A5C8ED;
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: #A5C8ED;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* 主内容区 */
+        .main-content {
+            margin-top: 70px;
+            min-height: calc(100vh - 70px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 80px 40px;
+        }
+
+        .welcome-section {
+            text-align: center;
+            max-width: 800px;
+        }
+
+        .welcome-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 4rem;
+            font-weight: 700;
+            color: #5A7A9A;
+            margin-bottom: 20px;
+            letter-spacing: 3px;
+        }
+
+        .welcome-subtitle {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 1.8rem;
+            color: #A5C8ED;
+            margin-bottom: 40px;
+            font-weight: 400;
+        }
+
+        .welcome-description {
+            font-size: 1.1rem;
+            color: #7A9AB5;
+            line-height: 1.8;
+            margin-bottom: 50px;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 15px 40px;
+            background: linear-gradient(135deg, #A5C8ED 0%, #D1E3F8 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 500;
+            letter-spacing: 2px;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(165, 200, 237, 0.3);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(165, 200, 237, 0.4);
+        }
+
+        /* 页脚 */
+        footer {
+            padding: 30px;
+            text-align: center;
+            color: #A5C8ED;
+            font-size: 0.9rem;
+            border-top: 1px solid rgba(165, 200, 237, 0.2);
+        }
+
+        /* 移动端适配 */
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 0 20px;
+            }
+
+            .nav-links {
+                gap: 20px;
+                font-size: 0.85rem;
+            }
+
+            .welcome-title {
+                font-size: 2.5rem;
+            }
+
+            .welcome-subtitle {
+                font-size: 1.3rem;
+            }
+
+            .main-content {
+                padding: 40px 20px;
+            }
+        }
+    </style>
 </head>
 <body>
-  
-  <!-- 开屏动画容器 -->
-  <div id="splash-screen" class="splash-container">
-    <iframe src="splash/splash-01/splash.html" 
-            frameborder="0" 
-            style="width:100vw; height:100vh; position:fixed; top:0; left:0; z-index:9999; background:#FFFFFF;">
-    </iframe>
-  </div>
-  
-  <!-- 主内容区 -->
-  <div id="main-content" class="main-content">
-    
     <!-- 导航栏 -->
     <nav class="navbar">
-      <div class="nav-container">
-        <div class="nav-logo">Drifting Veil</div>
-        
-        <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">
-          <span></span>
-          <span></span>
-        </button>
-        
-        <ul class="nav-menu" id="navMenu">
-          <li><a href="#home" class="nav-link active">首页</a></li>
-          <li><a href="#gallery" class="nav-link">画廊</a></li>
-          <li><a href="#characters" class="nav-link">角色</a></li>
-          <li><a href="#about" class="nav-link">关于</a></li>
+        <div class="logo">DRIFTING VEIL</div>
+        <ul class="nav-links">
+            <li><a href="index.html">首页</a></li>
+            <li><a href="characters.html">角色</a></li>
+            <li><a href="#gallery">画廊</a></li>
+            <li><a href="#about">关于</a></li>
         </ul>
-      </div>
     </nav>
-    
-    <!-- 装饰背景线条 -->
-    <svg class="bg-lines" viewBox="0 0 1000 1000">
-      <circle cx="500" cy="500" r="300" fill="none" stroke="currentColor" stroke-width="0.5" opacity="0.3"/>
-      <circle cx="500" cy="500" r="400" fill="none" stroke="currentColor" stroke-width="0.5" opacity="0.2"/>
-      <path d="M0,500 Q500,0 1000,500" fill="none" stroke="currentColor" stroke-width="0.5" opacity="0.25"/>
-      <path d="M0,500 Q500,1000 1000,500" fill="none" stroke="currentColor" stroke-width="0.5" opacity="0.25"/>
-    </svg>
-    
-    <!-- 主页英雄区 -->
-    <section id="home" class="hero-section">
-      <div class="hero-container">
-        
-        <!-- 标题 -->
-        <div class="main-title" id="mainTitle">
-          <h1 class="hero-title-en" id="heroTitleEn">CREATIVE PORTFOLIO</h1>
-          <p class="hero-title-zh" id="heroTitleZh">创意作品集</p>
+
+    <!-- 主内容 -->
+    <main class="main-content">
+        <div class="welcome-section">
+            <h1 class="welcome-title">CREATIVE PORTFOLIO</h1>
+            <h2 class="welcome-subtitle">创意作品集</h2>
+            <p class="welcome-description">
+                欢迎来到我的创意世界。这里收藏着每一个角色的故事，每一幅作品的灵魂。
+                让我们一起探索这片梦幻的蓝色海洋。
+            </p>
+            <a href="characters.html" class="cta-button">探索角色</a>
         </div>
-        
-        <!-- 轨道标签系统 -->
-        <div class="tag-orbit" id="tagOrbit">
-          <!-- 标签将通过 JavaScript 动态生成 -->
-        </div>
-        
-        <!-- 中心圆形图片 -->
-        <div class="center-frame" id="centerFrame">
-          <img src="assets/images/hero-visual.jpg" alt="Featured Work" id="heroImage">
-        </div>
-        
-        <!-- 滚动提示 -->
-        <div class="scroll-hint">
-          <span>SCROLL TO EXPLORE</span>
-          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-            <path d="M10 5V15M10 15L5 10M10 15L15 10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </div>
-        
-      </div>
-    </section>
-    
-    <!-- 角色卡片展示区 -->
-    <section id="characters" class="cards-section">
-      <div class="cards-container">
-        <h2 class="section-title">角色作品</h2>
-        <div class="featured-cards" id="featuredCards">
-          <!-- 卡片将通过 JavaScript 动态生成 -->
-        </div>
-      </div>
-    </section>
-    
-    <!-- 页脚水印 -->
-    <footer class="site-footer">
-      <p class="watermark">Created by <span id="authorName">@玉元一shadow</span></p>
-      <p class="copyright">Powered by Drifting Veil Template</p>
+    </main>
+
+    <!-- 页脚 -->
+    <footer>
+        <p>Created by @玉元一shadow | Powered by Drifting Veil Template</p>
     </footer>
-    
-  </div>
-  
-  <!-- GSAP 动画库 -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-  
-  <!-- 主脚本 -->
-  <script src="scripts/main.js"></script>
-  
 </body>
 </html>
+
 
