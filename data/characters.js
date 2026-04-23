@@ -6,12 +6,52 @@ window.CHARACTERS_DATA = [
         category: "原创角色",
         image: "assets/images/characters/char1.jpg",
         
-        // 详情页专用字段
+        // 第一屏：基础信息
         quote: "冰雪之中，藏着最温暖的心。",
         description: "出生于北方雪国的冰系魔法师。她的魔法不仅能冻结万物，更能守护她所珍视的一切。在寒冷的外表下，隐藏着一颗炽热的心。作为雪国的守护者，她用自己的力量维护着这片土地的和平。",
         tags: ["冰系魔法", "守护者", "温柔", "强大"],
         attributes: ["原创角色", "主角", "魔法系", "冰属性"],
-        note: "A guardian born from ice and snow..."
+        note: "A guardian born from ice and snow...",
+        
+        // 第二屏：编辑区内容
+        editorialTitle: "THE ICE<br>GUARDIAN'S<br>JOURNEY",
+        galleryImages: [
+            "assets/images/characters/char1-gallery1.jpg",
+            "assets/images/characters/char1-gallery2.jpg",
+            "assets/images/characters/char1-gallery3.jpg"
+        ],
+        captions: [
+            "雪国的黎明",
+            "冰晶的记忆",
+            "守护的誓言"
+        ],
+        storyTitle: "冰雪守护者的诞生",
+        storyContent: "在遥远的北方雪国，艾莉娅从小就展现出了非凡的冰系魔法天赋。她的力量来自于古老的冰龙血脉，这让她能够操控冰雪，创造出美丽而致命的冰晶。然而，强大的力量也带来了孤独，直到她遇到了那个改变她命运的人...",
+        extendedDesc: "艾莉娅的性格如同她的魔法一样，外表冷酷但内心温暖。她不善言辞，更喜欢用行动来表达自己的关心。在战斗中，她是无情的冰霜女王；在朋友面前，她是可靠的守护者。她的梦想是让雪国的人民不再受到寒冷和战争的威胁，为此她愿意付出一切。",
+        
+        // 第三屏：更多画廊
+        moreGallery: [
+            {
+                image: "assets/images/characters/char1-more1.jpg",
+                title: "冰晶魔法",
+                desc: "艾莉娅施展冰系魔法的瞬间"
+            },
+            {
+                image: "assets/images/characters/char1-more2.jpg",
+                title: "雪国风光",
+                desc: "她守护的美丽雪国"
+            },
+            {
+                image: "assets/images/characters/char1-more3.jpg",
+                title: "战斗姿态",
+                desc: "面对敌人时的英姿"
+            },
+            {
+                image: "assets/images/characters/char1-more4.jpg",
+                title: "温柔时刻",
+                desc: "与朋友相处的温暖瞬间"
+            }
+        ]
     },
     {
         id: 2,
@@ -22,72 +62,35 @@ window.CHARACTERS_DATA = [
         description: "神秘的剑士，守护着古老的秘密。他的剑术出神入化，但很少有人知道他真正的身份。传说他是古代王国最后的守护骑士，背负着不为人知的使命。",
         tags: ["剑术大师", "神秘", "骑士", "守护"],
         attributes: ["同人创作", "配角", "战士系", "光属性"],
-        note: "The last knight of the fallen kingdom..."
+        note: "The last knight of the fallen kingdom...",
+        
+        editorialTitle: "THE LAST<br>KNIGHT'S<br>OATH",
+        galleryImages: [
+            "assets/images/characters/char2-gallery1.jpg",
+            "assets/images/characters/char2-gallery2.jpg",
+            "assets/images/characters/char2-gallery3.jpg"
+        ],
+        captions: [
+            "骑士的荣耀",
+            "剑与誓言",
+            "王国的记忆"
+        ],
+        storyTitle: "最后的守护骑士",
+        storyContent: "凯尔是古代辉煌王国的最后一位守护骑士。当王国陷落时，他发誓要守护王国的最后遗产——一把传说中的圣剑。数百年来，他独自游走在世界各地，寻找能够重建王国的继承者。",
+        extendedDesc: "凯尔的剑术融合了古代骑士的精髓和现代战斗技巧。他沉默寡言，但每一次出手都精准致命。虽然背负着沉重的过去，但他从未放弃希望。他相信，总有一天，正义会重新降临这片土地。",
+        
+        moreGallery: [
+            {
+                image: "assets/images/characters/char2-more1.jpg",
+                title: "圣剑之光",
+                desc: "传说中的圣剑"
+            },
+            {
+                image: "assets/images/characters/char2-more2.jpg",
+                title: "骑士精神",
+                desc: "永不磨灭的信念"
+            }
+        ]
     },
-    {
-        id: 3,
-        name: "露娜",
-        category: "原创角色",
-        image: "assets/images/characters/char3.jpg",
-        quote: "月光是我的指引，星辰是我的伙伴。",
-        description: "月光下的精灵公主，拥有操控月光的能力。她优雅而神秘，总是在夜晚出现。作为精灵族的公主，她肩负着连接人类与精灵世界的重任。",
-        tags: ["精灵", "月光", "优雅", "神秘"],
-        attributes: ["原创角色", "主角", "魔法系", "月属性"],
-        note: "Dancing under the moonlight..."
-    },
-    {
-        id: 4,
-        name: "雷克斯",
-        category: "原创角色",
-        image: "assets/images/characters/char4.jpg",
-        quote: "与龙同行，无所畏惧。",
-        description: "勇敢的龙骑士，与巨龙建立了深厚的羁绊。他年轻但充满勇气，总是冲在最前线保护同伴。他的梦想是成为最伟大的龙骑士。",
-        tags: ["龙骑士", "勇敢", "热血", "冒险"],
-        attributes: ["原创角色", "主角", "战士系", "火属性"],
-        note: "Soaring through the skies with dragons..."
-    },
-    {
-        id: 5,
-        name: "索菲亚",
-        category: "同人创作",
-        image: "assets/images/characters/char5.jpg",
-        quote: "时间的长河中，我是唯一的旅人。",
-        description: "时空旅行者，拥有穿越时间的能力。她见证了无数历史时刻，但也因此感到孤独。她的使命是修正时间线上的错误，维护历史的正常进程。",
-        tags: ["时空", "旅行者", "智慧", "孤独"],
-        attributes: ["同人创作", "主角", "魔法系", "时间属性"],
-        note: "A wanderer across the river of time..."
-    },
-    {
-        id: 6,
-        name: "阿修罗",
-        category: "原创角色",
-        image: "assets/images/characters/char6.jpg",
-        quote: "暗影是我的领域，沉默是我的武器。",
-        description: "暗影刺客，行踪诡秘。他从不多言，但行动迅速而致命。虽然身处黑暗，但他有自己的正义准则，只对真正的恶人出手。",
-        tags: ["刺客", "暗影", "神秘", "冷酷"],
-        attributes: ["原创角色", "配角", "刺客系", "暗属性"],
-        note: "Silent as shadow, swift as wind..."
-    },
-    {
-        id: 7,
-        name: "米娅",
-        category: "原创角色",
-        image: "assets/images/characters/char7.jpg",
-        quote: "光明会驱散一切黑暗。",
-        description: "治愈系牧师，拥有强大的治疗能力。她温柔善良，总是用笑容感染身边的人。她的治愈魔法不仅能治疗身体的伤痛，更能抚慰心灵的创伤。",
-        tags: ["治愈", "温柔", "光明", "善良"],
-        attributes: ["原创角色", "辅助", "牧师系", "光属性"],
-        note: "Healing light in the darkest hour..."
-    },
-    {
-        id: 8,
-        name: "泽维尔",
-        category: "同人创作",
-        image: "assets/images/characters/char8.jpg",
-        quote: "炼金术的奥秘，藏在每一次实验中。",
-        description: "炼金术大师，痴迷于研究各种炼金配方。他的实验室里堆满了各种奇怪的材料和器具。虽然有时显得疯狂，但他的炼金术确实帮助了许多人。",
-        tags: ["炼金术", "学者", "疯狂", "天才"],
-        attributes: ["同人创作", "辅助", "炼金系", "无属性"],
-        note: "The mad genius of alchemy..."
-    }
+    // 可以继续添加更多角色...
 ];
